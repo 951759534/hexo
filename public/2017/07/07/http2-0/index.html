@@ -1,0 +1,512 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>http2.0 | 王帅的博客</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="wang">
+    
+
+    
+    <meta name="description" content="HTTP2.0是超文本传输协议2.0  下一代的HTTP协议 只适用于https://网址网页优化的一大关键局是要将传输的数据压缩为最小  而 HTTP2.0有很多关于这方面的优化接下来将HTTP1.1和HTTP2.0进行对比    #http1.1  持久连接  每个TCP连接开始都有三次握手  而开启持久化连接后不必要每次都握手   即request属性中的Connection 为keep-">
+<meta name="keywords" content="HTTP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="http2.0">
+<meta property="og:url" content="https://951759534.github.io/2017/07/07/http2-0/index.html">
+<meta property="og:site_name" content="王帅的博客">
+<meta property="og:description" content="HTTP2.0是超文本传输协议2.0  下一代的HTTP协议 只适用于https://网址网页优化的一大关键局是要将传输的数据压缩为最小  而 HTTP2.0有很多关于这方面的优化接下来将HTTP1.1和HTTP2.0进行对比    #http1.1  持久连接  每个TCP连接开始都有三次握手  而开启持久化连接后不必要每次都握手   即request属性中的Connection 为keep-">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-10-11T05:04:06.032Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="http2.0">
+<meta name="twitter:description" content="HTTP2.0是超文本传输协议2.0  下一代的HTTP协议 只适用于https://网址网页优化的一大关键局是要将传输的数据压缩为最小  而 HTTP2.0有很多关于这方面的优化接下来将HTTP1.1和HTTP2.0进行对比    #http1.1  持久连接  每个TCP连接开始都有三次握手  而开启持久化连接后不必要每次都握手   即request属性中的Connection 为keep-">
+
+    
+    <link rel="alternative" href="/atom.xml" title="王帅的博客" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="王帅的博客" title="王帅的博客"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="王帅的博客">王帅的博客</a></h1>
+				<h2 class="blog-motto">慢慢积累 慢慢变强</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:951759534.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/07/07/http2-0/" title="http2.0" itemprop="url">http2.0</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="wang" target="_blank" itemprop="author">wang</a>
+		
+  <p class="article-time">
+    <time datetime="2017-07-07T12:16:15.000Z" itemprop="datePublished"> 发表于 2017-07-07</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			
+		
+		</div>
+		
+		<p> HTTP2.0是超文本传输协议2.0  下一代的HTTP协议 只适用于https://网址<br>网页优化的一大关键局是要将传输的数据压缩为最小  而 HTTP2.0有很多关于这方面的优化<br>接下来将HTTP1.1和HTTP2.0进行对比   </p>
+<p>#http1.1</p>
+<ol>
+<li>持久连接  每个TCP连接开始都有三次握手  而开启持久化连接后不必要每次都握手   即request属性中的Connection 为keep-alive   </li>
+<li>HTTP管道  持久HTTP多次请求满足先进先出  发送请求 等待响应完成 发送下一个请求<br>单 HTTP1.1不允许多路复用  假如发送两个请求 记事客户端同时发送两个请求 先请求HTML 在请求CSS  而且CSS资源先准备就绪服务器一会先响应HTML资源 在响应 CSS  但是 HTTP2.0可以多路复用  按照优先级返回响应 </li>
+<li>HTTP1.0增加请求和响应首部 方便能够交换有关请求和响应的元信息<br>HTTP2.0新增首部压缩   </li>
+<li>连接和拼合<br> 减少请求次数是性能优化的关键  HTTP1.X可以吧多个资源捆绑打包 通过一次网络请求获取<br> HTTP2.0可以多向请求和响应 消除了请求多个资源就是用多个TCP连接    </li>
+<li>嵌入资源   把资源嵌入文档中可以减少请求次数<br>#http2.0</li>
+<li>http2.0的性能增强  全在于二进制分帧层 作用是定义如何封装HTTP消息并在客户端和服务端之间传输    </li>
+<li>所用HTTP2.0通信都在一个连接上完成 连接承载任意数量的双向数据流 每个数据流以消息发送  消息由一个或者多个帧组成 HTTP2.0最小的通信单位是帧  帧可以乱序发送 根据帧首部的流标识重新组装 流可以并行的在同一个TCP连接上交换消息</li>
+<li>多向请求和响应  HTTP1.X中客户端想发送并行的请求和改进性能 必须使用多个TCP连接 HTTP2.0需要一个就行   </li>
+<li>HTTP2.0新增请求优先级   根据浏览器请求优先的资源进行响应避免不必要的阻塞   </li>
+<li>服务器推送 HTTP2.0可以进行服务器的推送  </li>
+<li>首部压缩<br>HTTP2.0连接的两端都知道已经发送那些首部  根据之前接受首部数据进行对比 只发送差异的部分  </li>
+</ol>
+<p>参考<a href="http://www.cnblogs.com/strick/p/5658280.html" target="_blank" rel="noopener">http2.0</a></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/HTTP/">HTTP</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="https://951759534.github.io/2017/07/07/http2-0/" data-title="http2.0 | 王帅的博客" data-tsina="undefined" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2017/07/12/浅谈src和href/" title="浅谈src和href">
+  <strong>上一篇：</strong><br/>
+  <span>
+  浅谈src和href</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2017/07/06/回顾html5/"  title="回顾html5">
+ <strong>下一篇：</strong><br/> 
+ <span>回顾html5
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ 
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/前端/" title="前端">前端<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/杂文/" title="杂文">杂文<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/前端安全/" title="前端安全">前端安全<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/HTTP/" title="HTTP">HTTP<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/闲文/" title="闲文">闲文<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/移动端/" title="移动端">移动端<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/前端-js/" title="前端 js">前端 js<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/js库/" title="js库">js库<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/git/" title="git">git<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/移动端-前端/" title="移动端 前端">移动端 前端<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/java-ORM框架/" title="java ORM框架">java ORM框架<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/面试笔记/" title="面试笔记">面试笔记<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/node/" title="node">node<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/开发思想/" title="开发思想">开发思想<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/前端-js库/" title="前端 js库">前端 js库<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+    </ul>
+</div>
+
+  
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> 专注 <br/>
+			to be better</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com//u/1583479425" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/951759534" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:951759534@qq.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo"></a>© 2018
+		
+		<a href="/about" target="_blank" title="wang">wang</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

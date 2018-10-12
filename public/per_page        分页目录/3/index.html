@@ -1,0 +1,975 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>王帅的博客</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="wang">
+    
+
+    
+    <meta name="description" content="博客">
+<meta property="og:type" content="website">
+<meta property="og:title" content="王帅的博客">
+<meta property="og:url" content="https://951759534.github.io/per_page        分页目录/3/index.html">
+<meta property="og:site_name" content="王帅的博客">
+<meta property="og:description" content="博客">
+<meta property="og:locale" content="zh-CN">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="王帅的博客">
+<meta name="twitter:description" content="博客">
+
+    
+    <link rel="alternative" href="/atom.xml" title="王帅的博客" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="王帅的博客" title="王帅的博客"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="王帅的博客">王帅的博客</a></h1>
+				<h2 class="blog-motto">慢慢积累 慢慢变强</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:951759534.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main">
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/05/30/谈谈js的内存泄漏/" title="谈谈js的内存泄漏" itemprop="url">谈谈js的内存泄漏</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="wang" target="_blank" itemprop="author">wang</a>
+		
+  <p class="article-time">
+    <time datetime="2017-05-30T05:06:00.000Z" itemprop="datePublished"> 发表于 2017-05-30</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>  javascript具有自动垃圾回收机制  执行环境会管理代码执行过程中的内存<br>  原理: 垃圾收集器会定期中出不在使用的变量  然后释放其内存   </p>
+<blockquote>
+<ol>
+<li>标记清除  <pre><code>js中最为常见的回收方式就是标记清除算法     
+当变量进入环境时  在函数声明一个变量将这个变量标记为&apos;进入  环境&apos; 从逻辑上讲 永远不能释放进入环境的变量所占用的内存       
+因为只要执行留进入相应环境  就可能用到它们 当变量离开环境  时  将其标记为离开环境    
+</code></pre></li>
+</ol>
+</blockquote>
+<pre><code>function test(){  
+        let  aa = &apos;a&apos;;  //被标记 进入环境
+    }
+ test()  //执行完毕  aa被标记为离开环境被回收   
+</code></pre><blockquote>
+<p>   垃圾回收器会在运行时候给存储在内存中的所有变量加上标记<br>    会去除环境中变量以及环境中变量引用的变量标记(闭包)  在此之后加上标记变量被视为准备删除的变量  最后 垃圾回收器完成清楚工作<br>    到目前为止 IE,Firefox,Opera,Chrome,Safari实现的都是标记清除垃圾回收机制只不过垃圾收集时间不相同罢了 </p>
+</blockquote>
+<blockquote>
+<p>2.引用计数<br>    function test(){<br>    let a = {};  //a的引用计数为0<br>    let b = a;     // a的引用计数为1<br>    let c = a ;  //a的引用计数为2<br>    let b = {} ; // a的引用计数减1  </p>
+</blockquote>
+<p>  内存泄漏:<br>           内存泄漏是指一块被分配的内存既不能使用,又不能回收,直到浏览器进程自动结束<br>    在C++中 因为是手动管理内存,内存泄漏是经常出现的事情<br>    在C#和Java等语言采用自动垃圾回收方法管理内存 正常使用时不会发生泄漏 浏览器也是采用自动垃圾回收方法管理内存.但由于浏览器垃圾回收方法由bug 会产生内存泄漏   </p>
+<blockquote>
+<p>内存泄漏的几种情况:   </p>
+<pre><code>1. 当页面中元素被移除或者替换时，若元素绑定事件仍没有被移除,在IE中会做出恰当的处理  要手动移除事件不然会产生内存泄漏   
+2.循环引用 （IE7/8） 
+</code></pre></blockquote>
+<pre><code>let a = document.querySelector(&quot;.aa&quot;)
+let b = document.querySelector(&quot;.bb&quot;)
+a.f = b
+b.f = a   
+</code></pre><blockquote>
+<p>   上方代码a b互相引用 虽然会在垃圾收集系统识别处理  但是在IE下如果 循环引用的是DOM或者是ActiveX对象 垃圾回收系统不会发现它们之间的循环关系与其他对象是隔离并释放它们  最终它们会被保存在内存中   解决办法手动解除循环引用   a.f = null<br>    我们知道，IE中有一部分对象并不是原生js对象。例如，其内存泄露 DOM和BOM中的对  象就是使用C++以COM对象的形式实现的，而COM对象  的垃圾回收机制采用的就是引用计数   策略。因此，即使IE的js引擎采用标记清除策略来实现，但js访问的COM对象依然是基于引用计  数策略的。换句话说，只要在IE中涉及COM对象，就会存在循环引用的问题。</p>
+<pre><code>3. 闭包    
+  闭包会维持函数内局部变量 使其得不到释放    
+4. 自动类型装箱转换  
+</code></pre></blockquote>
+<pre><code>let a = &apos;aaaa&apos;
+console.log(a.length)   
+</code></pre><blockquote>
+<pre><code>s本是string类型而非object 没有length属性  所以访问length  会自动创建一个临时的String 对象 封装s 这个对象一定会泄漏 解决方法  
+</code></pre></blockquote>
+<pre><code>console.log(new String(a).length)  
+
+ 5. 使用全局变量  也会导致内存 泄漏    
+ 6.  未清除的定时器  若定时器中的的元素被dom移除  定时器依然存在 同时定时器中的变量依然存在 不会被释放 
+</code></pre><blockquote>
+<pre><code>let someResource = getData();
+    setInterval(function() {
+        let node = document.getElementById(&apos;Node&apos;);
+    if(node) {
+    node.innerHTML = JSON.stringify(someResource));
+        }
+    }, 1000);    
+</code></pre></blockquote>
+<p>参考  <a href="https://auth0.com/blog/four-types-of-leaks-in-your-javascript-code-and-how-to-get-rid-of-them/" target="_blank" rel="noopener"> 4 Types of Memory Leaks in JavaScript and How to Get Rid Of Them</a></p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/前端/">前端</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/05/29/谈谈bfc/" title="谈谈bfc" itemprop="url">谈谈bfc</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="wang" target="_blank" itemprop="author">wang</a>
+		
+  <p class="article-time">
+    <time datetime="2017-05-29T04:21:20.000Z" itemprop="datePublished"> 发表于 2017-05-29</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>BFC(Block Formating Context,块级格式化上下文)<br>块级格式化上下文就是页面上的一个隔离的渲染区域 容器内部的<br>子元素不过在布局上影响容器外的元素  反之也是如此<br>如何产生BFC呢？ float的值不为none  overflow值不为visible  position 的值 为 position和fixed  display的值为table-cell<br>table-caption inline-block的任何一个<br>常见的多栏布局  结合块级元素浮动  里面的元素在一个相对隔离的环境中运行<br>说到BFC就要谈谈别的FC的  FC全称Formating Contexts  是W3C 中  CSS2.1规范中一个概念  他是页面中一块渲染区域有一套渲染规则 决定子元素如何定位 以及其他元素的关系和相互作用<br>IFC(Inline Formating Contexts)直译为”内联格式化上下文”<br>设置为display:inline-block会在外层产生IFC  可通过text-align:center使其水平居中<br>GFC(GridLayout Formating Contexts,网格布局上下文)<br>当一个元素display设置为grid时  此元素获得一个独立渲染的区域<br>我们可以通过在网格容器（grid container）上定义网格定义行（grid      definition rows）和网格定义列（grid definition columns）属性  各在网格项目（grid item）上定义网格行（grid row）和网格列（grid      columns）为每一个网格项目（grid item）定义位置和空间。<br>FFC(Flex Formatting Contexts,自适应格式化上下文)  display:flex和inline-flex 会生成自适应容器   </p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/前端/">前端</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/05/29/谈谈cookie/" title="谈谈cookie" itemprop="url">谈谈cookie</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="wang" target="_blank" itemprop="author">wang</a>
+		
+  <p class="article-time">
+    <time datetime="2017-05-29T04:08:53.000Z" itemprop="datePublished"> 发表于 2017-05-29</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>cookie为持久保存客户端数据提供了方便 分担了服务器存储的负担,但还是有很多的局限性<br>第一: 每个特定的域名最懂生成20个cookie<br>IE和Opera会清理近期最少使用的cookie Firefox会随机清理cookie<br>cookie最大大约有4096个字节 为了兼容性 一般不能超过4095个字节<br>IE提供了一种存储可以持久化用户数据叫做userData 从IE5.0开始<br>每个数据最多128k 每个域名最多1M<br>cookie的优点:<br>具有极高的可扩展型和可用性<br>通过加密和安全传输技术(SSL)减少cookie被破解的可能性<br>可以控制cookie的生命周期<br>缺点<br>Cookie数量和长度的限制 每个域下最多只能有20条cookie  每个cookie长度不能超过4KB<br>具有安全性的问题  如果cookie被人拦截了  被转发 可以 获得session信息<br>有的用户在浏览器的禁用cookie   </p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/前端/">前端</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/05/28/svg/" title="svg" itemprop="url">svg</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="wang" target="_blank" itemprop="author">wang</a>
+		
+  <p class="article-time">
+    <time datetime="2017-05-28T06:31:37.000Z" itemprop="datePublished"> 发表于 2017-05-28</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>SVG是可伸缩矢量图形<br>SVG用于定义网络的基于矢量的图形<br>SVG使用XML格式定义图形<br>SVG再放大和缩小或改变尺寸其图形质量都不会发生变化<br>浏览器支持<br>IE9以上<br>和Canvas的区别<br>SVG是使用XML来描述2D图形的语言<br>Canvas用过JavaScript来绘制2D图形<br>SVG基于XML SVG没个DOM都是可用的  可以为某个元素附上事件处理器<br>SVG不适合游戏应用<br>Canvas是逐像素渲染  若位置发生变化 整个场景也需要重新绘制   </p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/前端/">前端</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/05/28/关于CSRF详解/" title="关于CSRF详解" itemprop="url">关于CSRF详解</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="wang" target="_blank" itemprop="author">wang</a>
+		
+  <p class="article-time">
+    <time datetime="2017-05-28T06:01:51.000Z" itemprop="datePublished"> 发表于 2017-05-28</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>CSRF(Cross-site request forgery)跨站请求伪造<br>攻击者盗用了你的身份 以你的名义发送恶意请求<br>准备求来说就是<br>1.登录受信任网站A，并在本地生成Cookie。<br>2.在不登出A的情况下，访问危险网站B。<br>如何防御呢<br>CSRF的防御可以从服务端和客户端两方面着手，防御效果是从服务端着手效果比较好，现在一般的CSRF防御也都在服务端进行。<br>在提交请求时服务器增加随机数在提交时进行后端验证<br>验证码  在表单提交时增加随机验证码即随机字符串</p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/前端安全/">前端安全</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/05/28/页面加载进行优化/" title="页面加载进行优化" itemprop="url">页面加载进行优化</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="wang" target="_blank" itemprop="author">wang</a>
+		
+  <p class="article-time">
+    <time datetime="2017-05-28T05:26:59.000Z" itemprop="datePublished"> 发表于 2017-05-28</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>减少http请求  (使用sprite图 对js文件进行合并加载)<br>优化图片文件  减少其尺寸<br>压缩js css文件  有利于网络传输<br>服务器端使用gzip压缩方法   </p>
+<blockquote>
+<p>gzip是一个非常简单的方法  由于CSS文件和HTML文件使用了大量重复的文字 使用GZIP压缩公用字符串<br>减少页面和样式表70%的请求<br>把网页内容写的使压缩更有效<br>保持引号的一致性<br>优化CSS和JavaScript   </p>
+</blockquote>
+<p>网址后面加’/‘ 不加’/‘服务器会多一次判断过程加直接访问网站根目录下的默认文件<br>对图片标明高度和宽度 若浏览未找到这两个参数 则需要边下载边计算大小不仅影响速度 也影响用户体验  </p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/前端/">前端</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/05/25/详解之xss漏洞/" title="详解之xss漏洞" itemprop="url">详解之xss漏洞</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="wang" target="_blank" itemprop="author">wang</a>
+		
+  <p class="article-time">
+    <time datetime="2017-05-25T01:22:50.000Z" itemprop="datePublished"> 发表于 2017-05-25</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>  今天突然又翻一下关于xss漏洞的资料  xss又称css（Cross Site Scripting）跨站脚本攻击<br>之前只是以为xss只是用户输入过滤不当而造成 然而发现原来里面的学问这么深<br>    xss分为三种类型：存储型xss 反射性xss  dom-xss<br>  存储型的xss  数据库中存有存在的xss攻击的数据，返回给客户端。若数据未被转义被浏览器渲染 有可能导致xss攻击<br>  反射性xss 将用户输入存在的XSS攻击数据发送给后台 后台并未对数据进行存储 也未经过任何过滤 就有可能导致xss攻击<br>  DOM-XSS<br>    用户点击链接参数带有js语言  后台未对url参数进行过滤 返回给客户端 前端直接从url中获得参数<br>    例如利用BOM对象location中的href进行正则匹配获得带有xss漏洞的脚本参数 攻击者利用这个漏洞做出无法想象的事情 xss攻击无处在 如何进行防御 </p>
+<h3 id="xss漏洞的防御"><a href="#xss漏洞的防御" class="headerlink" title="xss漏洞的防御"></a>xss漏洞的防御</h3><p>对输入端和输出端统一进行过滤<br>           对于前端 有一个xss过滤很好的类库 毕竟术业有专攻 <a href="https://github.com/leizongmin/js-xss" target="_blank" rel="noopener">传送门</a><br>           后端 有一个不同的使用方式，编码方式不同，java现成的工具可以用——ESAPI，不同位置如何转义可参照ESAPI文档，<a href="https://github.com/ESAPI/esapi-java-legacy/tree/master/configuration/esapi" target="_blank" rel="noopener">传送门</a>    比如属性值转义：</p>
+<blockquote>
+<p>String safe = ESAPI.encoder().encodeForHTMLAttribute(<br>request.getParameter( “input” ) );   </p>
+</blockquote>
+<p>php简单过滤:</p>
+<blockquote>
+<p>$safe = htmlspecialchars($this-&gt;input-&gt;get/post(“input”))</p>
+</blockquote>
+<p>前端要做好的工作 要有良好的css设计  html标签a的href进行规范化 避免用JavaScript打开一个新的窗口 不要使用全局变量 将不可信的数据例如白名单 提交数据时进行校验       –完</p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/前端安全/">前端安全</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/05/24/Html5离线缓存机制-manifest/" title="Html5离线缓存机制 manifest" itemprop="url">Html5离线缓存机制 manifest</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="wang" target="_blank" itemprop="author">wang</a>
+		
+  <p class="article-time">
+    <time datetime="2017-05-24T02:32:22.000Z" itemprop="datePublished"> 发表于 2017-05-24</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/05/22/用户输入了网址-发生了什么事情？/" title="用户输入了网址,发生了什么事情？" itemprop="url">用户输入了网址,发生了什么事情？</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="wang" target="_blank" itemprop="author">wang</a>
+		
+  <p class="article-time">
+    <time datetime="2017-05-22T14:20:25.000Z" itemprop="datePublished"> 发表于 2017-05-22</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>第1步，查找浏览器缓存。</p>
+<blockquote>
+<p>浏览器会检查缓存中有没有这个域名对应的解析过的IP地址，如果缓存中有，这个解析过程就将结束。浏览器      缓存域名也是有限制的，不仅浏览器缓存大小有限制，而且缓存的时间也有限制，通常情况下为几分钟到几小      时不等。这个缓存时间太长和太短都不好，如果缓存时间太长，一旦域名被解析到的IP有变化，会导致被客户端缓存的域名无法解析到变化后的IP地址，以致该域名不能正常解析，这段时间内有可能会有一部分用户无法访问网站。如果时间设置太短，会导致用户每次访问网站都要重新解析一次域名。  </p>
+</blockquote>
+<p>第2步，查找系统缓存。  </p>
+<blockquote>
+<p>如果用户的浏览器缓存中没有，浏览器会查找操作系统缓存中是否有这个域名对应的DNS解析结果。其实操作系统也会有一个域名解析的过程，在Windows中可以通过C:\Windows\System32\drivers\etc\hosts文件来设置，你可以将任何域名解析到任何能够访问的IP地址。如果你在这里指定了一个域名对应的IP地址，那么浏览器会首先使用这个IP地址。例如，我们在测试时可以将一个域名解析到一台测试服务器上，这样不用修改任何代码就能测试到单独服务器上的代码的业务逻辑是否正确。正是因为有这种本地DNS解析的规程，所以黑客就有可能通过修改你的域名解析来把特定的域名解析到它指定的IP地址上，导致这些域名被劫持。  </p>
+</blockquote>
+<p>第3步，查找路由器缓存。  </p>
+<blockquote>
+<p>如果系统缓存中也找不到，那么查询请求就会发向路由器 </p>
+</blockquote>
+<p>第4步，查找ISP DNS 缓存。</p>
+<blockquote>
+<p>能查询ISP DNS 缓存服务器了。在我们的网络配置中都会有”DNS服务器地址”这一项，操作系统会把这个域名发送给这里设置的DNS，也就是本地区的域名服务器，通常是提供给你接入互联网的应用提供商。这个专门的域名解析服务器性能都会很好，它们一般都会缓存域名解析结果，当然缓存时间是受域名的失效时间控制的，一般缓存空间不是影响域名失效的主要因素。大约80%的域名解析都到这里就已经完成了，所以ISP DNS主要承担了域名的解析工作。</p>
+</blockquote>
+<p>第5步，递归搜索。  </p>
+<blockquote>
+<p>在前面都没有办法命中的DNS缓存的情况下,(1)本地 DNS服务器即将该请求转发到互联网上的根域（即一个完整域名最后面的那个点，通常省略不写）。(2)根域将所要查询域名中的顶级域（假设要查询ke.qq.com，该域名的顶级域就是com）的服务器IP地址返回到本地DNS。(3) 本地DNS根据返回的IP地址，再向顶级域（就是com域）发送请求。(4) com域服务器再将域名中的二级域（即ke.qq.com中的qq）的IP地址返回给本地DNS。(5) 本地DNS再向二级域发送请求进行查询。(6) 之后不断重复这样的过程，直到本地DNS服务器得到最终的查询结果，并返回到主机。这时候主机才能通过域名访问该网站。</p>
+</blockquote>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/HTTP/">HTTP</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/05/20/chrome-56版本以上的prevent事件/" title="chrome-56版本以上的prevent事件" itemprop="url">chrome-56版本以上的prevent事件</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="wang" target="_blank" itemprop="author">wang</a>
+		
+  <p class="article-time">
+    <time datetime="2017-05-20T15:25:53.000Z" itemprop="datePublished"> 发表于 2017-05-20</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <blockquote>
+<p>Unable to preventDefault inside passive event listener due to target being treated as passive. See <a href="https://www.chromestatus.com/.." target="_blank" rel="noopener">https://www.chromestatus.com/..</a>.<br>不能阻止浏览器默认行为<br>当你触摸滑动页面时，页面应该跟随手指一起滚动。而此时你绑定了一个 touchstart 事件，你的事件大概执行 200 毫秒。这时浏览器就犯迷糊了：如果你在事件绑定函数中调用了 preventDefault，那么页面就不应该滚动，如果你没有调用 preventDefault，页面就需要滚动。但是你到底调用了还是没有调用，浏览器不知道。只能先执行你的函数，等 200 毫秒后，绑定事件执行完了，浏览器才知道，“哦，原来你没有阻止默认行为，好的，我马上滚”。此时，页面开始滚。  </p>
+</blockquote>
+<p>oh no  所以为了让页面滚动变得更为流畅，从 chrome56 开始，在 window、document 和 body 上注册的 touchstart 和 touchmove 事件处理函数，会默认为是 passive: true。浏览器忽略默认事件<br>preventDefault() 可以第一时间滚动了。<br>解决方案</p>
+<blockquote>
+<p>注册事件是添加 { passive: false }<br>window.addListenEvent(“touchstart”,fn,{passive:  false})<br>  可以阻止默认事件但是也同时降低了性能    </p>
+</blockquote>
+<p>参考<a href="https://developers.google.com/web/updates/2017/01/scrolling-intervention" target="_blank" rel="noopener">Making touch scrolling fast by default</a>   需科学上网</p>
+<p>尽管对于移动端的Safari来说这仍然很有必要,网站不应该依赖在touchstart和touchmove监听器上调用preventDefault()来阻止默认行为.因为在Chrome中,这样做已经不被支持和提倡了.开发者应该在那些需要禁用滚动和缩放的元素上增加touch-actionCSS属性,好在任何touch事件出现前通知到浏览器.为了阻止tap(就像是一个click事件的产生)的默认行为,在touchend监听器中调用preventDefault().<br>这就是第二种方案<br>应用 CSS 属性 touch-action: none; 这样任何触摸事件都不会产生默认行为，但是 touch 事件照样触发。<br>参考 <a href="https://w3c.github.io/pointerevents/#the-touch-action-css-property" target="_blank" rel="noopener">css文档</a>  </p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/移动端/">移动端</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+
+  <nav id="page-nav" class="clearfix">
+    <a class="extend prev" rel="prev" href="/per_page        分页目录/2/"><span></span>Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/per_page        分页目录/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/per_page        分页目录/4/">4</a><a class="extend next" rel="next" href="/per_page        分页目录/4/">Next<span></span></a>
+  </nav>
+
+</div>
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/前端/" title="前端">前端<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/杂文/" title="杂文">杂文<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/前端安全/" title="前端安全">前端安全<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/HTTP/" title="HTTP">HTTP<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/闲文/" title="闲文">闲文<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/移动端/" title="移动端">移动端<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/前端-js/" title="前端 js">前端 js<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/js库/" title="js库">js库<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/git/" title="git">git<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/移动端-前端/" title="移动端 前端">移动端 前端<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/java-ORM框架/" title="java ORM框架">java ORM框架<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/面试笔记/" title="面试笔记">面试笔记<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/node/" title="node">node<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/开发思想/" title="开发思想">开发思想<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/前端-js库/" title="前端 js库">前端 js库<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+    </ul>
+</div>
+
+  
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> 专注 <br/>
+			to be better</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com//u/1583479425" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/951759534" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:951759534@qq.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo"></a>© 2018
+		
+		<a href="/about" target="_blank" title="wang">wang</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+ </html>

@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title><![CDATA[javascript原型链]]></title>
+    <url>%2F2017%2F08%2F01%2Fjavascript%E5%8E%9F%E5%9E%8B%E9%93%BE%2F</url>
+    <content type="text"><![CDATA[在javascript中 用proto属性表示一个对象的原型链 当查找一个对象的属性时,javascript会向上遍历原型链 知道找到指定名称的属性为止实现扩展方法 实现一个对象ObjectExtend的扩展 Object.prototype.Extend = function(objectExtend,object){ for(var key in object){ if (object.hasOwnProperty(key) &amp;&amp; objectExtend[key] === undefined) { objDestination[key] = objSource[key]; } } return objectExtend; } 上述例子实现将object属性 给objectExtend中Object类是所有类的父类 父类中的内置方法和定义方法子类会继承]]></content>
+      <tags>
+        <tag>前端</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[关于git命令]]></title>
+    <url>%2F2017%2F07%2F25%2F%E5%85%B3%E4%BA%8Egit%E5%91%BD%E4%BB%A4%2F</url>
+    <content type="text"><![CDATA[git的shell平常很少用 一般就用git的相关插件一键提交 不过还是还是知道比较好git中如何将文件下较多的文件提交 git add -A //多文件添加git add . //多文件添加git add 文件夹名 可以在根目录下增加.gitignore文件来过滤添加的文件 git commitgit status 文件名 //列出当前目录所有还没有被git管理的文件和被git管理且被修改但还未提交(git commit)的文件.git status -uno //可以只列出所有已经被git管理的且被修改但没提交的文件。]]></content>
+      <tags>
+        <tag>git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[react初探]]></title>
+    <url>%2F2017%2F07%2F24%2Freact%E5%88%9D%E6%8E%A2%2F</url>
+    <content type="text"><![CDATA[又要开始学习一门框架了 ——react这次还是用npm包管理工具 慢慢来 具体后面需要什么 再加 npm install -g create-reacte-appcreate-react-app myReactcd myReact到这里 可以看见一个简单的目录结构 不过还是少点什么接下来执行npm run eject 用来显示隐藏的webpack配置文件]]></content>
+      <tags>
+        <tag>前端</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[浅谈src和href]]></title>
+    <url>%2F2017%2F07%2F12%2F%E6%B5%85%E8%B0%88src%E5%92%8Chref%2F</url>
+    <content type="text"><![CDATA[src source的缩写 是script iframe img标签的属性 用于获取资源href Hypertext Reference 网上专业语言这么说的指定网络资源的位置，从而在当前元素或者当前文档和由当前属性定义的需要的锚点或资源之间定义一个链接或者关系。至于 link css中href属性 是由于有rel属性 rel属性 rel 属性规定当前文档与被链接文档之间的关系 正是href的定义–完]]></content>
+      <tags>
+        <tag>前端</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[http2.0]]></title>
+    <url>%2F2017%2F07%2F07%2Fhttp2-0%2F</url>
+    <content type="text"><![CDATA[HTTP2.0是超文本传输协议2.0 下一代的HTTP协议 只适用于https://网址网页优化的一大关键局是要将传输的数据压缩为最小 而 HTTP2.0有很多关于这方面的优化接下来将HTTP1.1和HTTP2.0进行对比 #http1.1 持久连接 每个TCP连接开始都有三次握手 而开启持久化连接后不必要每次都握手 即request属性中的Connection 为keep-alive HTTP管道 持久HTTP多次请求满足先进先出 发送请求 等待响应完成 发送下一个请求单 HTTP1.1不允许多路复用 假如发送两个请求 记事客户端同时发送两个请求 先请求HTML 在请求CSS 而且CSS资源先准备就绪服务器一会先响应HTML资源 在响应 CSS 但是 HTTP2.0可以多路复用 按照优先级返回响应 HTTP1.0增加请求和响应首部 方便能够交换有关请求和响应的元信息HTTP2.0新增首部压缩 连接和拼合 减少请求次数是性能优化的关键 HTTP1.X可以吧多个资源捆绑打包 通过一次网络请求获取 HTTP2.0可以多向请求和响应 消除了请求多个资源就是用多个TCP连接 嵌入资源 把资源嵌入文档中可以减少请求次数#http2.0 http2.0的性能增强 全在于二进制分帧层 作用是定义如何封装HTTP消息并在客户端和服务端之间传输 所用HTTP2.0通信都在一个连接上完成 连接承载任意数量的双向数据流 每个数据流以消息发送 消息由一个或者多个帧组成 HTTP2.0最小的通信单位是帧 帧可以乱序发送 根据帧首部的流标识重新组装 流可以并行的在同一个TCP连接上交换消息 多向请求和响应 HTTP1.X中客户端想发送并行的请求和改进性能 必须使用多个TCP连接 HTTP2.0需要一个就行 HTTP2.0新增请求优先级 根据浏览器请求优先的资源进行响应避免不必要的阻塞 服务器推送 HTTP2.0可以进行服务器的推送 首部压缩HTTP2.0连接的两端都知道已经发送那些首部 根据之前接受首部数据进行对比 只发送差异的部分 参考http2.0]]></content>
+      <tags>
+        <tag>HTTP</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[回顾html5]]></title>
+    <url>%2F2017%2F07%2F06%2F%E5%9B%9E%E9%A1%BEhtml5%2F</url>
+    <content type="text"><![CDATA[html5 是万维网的核心语言 经过第五次重大修改 在2014年10月定制完成 支持浏览器IE9+JS中新增document.querySelector()和document.querySelectorAll 两个API后者如果没有匹配内容返回空数组 前者没有匹配返回null html5新增 footer header aside section nav 等等 语义化标签 便于搜索引擎的优化input的type新增 email url number range date属性新增媒体标签 video audio 等媒体标签为什么会出现html5？为了使电脑更加理解网页的内容提高了用户的体验出现媒体标签更好地代替flash有助于开发人员的理解和维护跨不同浏览器平台的友好性]]></content>
+      <tags>
+        <tag>前端</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[很累]]></title>
+    <url>%2F2017%2F06%2F26%2F%E5%BE%88%E7%B4%AF%2F</url>
+    <content type="text"><![CDATA[今天竟然感冒了 好好准备考试 再去找实习 加油 终有一天会成功 等到那一天 我会回来在这篇博文中留下印记 加油]]></content>
+      <tags>
+        <tag>杂文</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[员工管理系统进度(一)]]></title>
+    <url>%2F2017%2F06%2F22%2F%E5%91%98%E5%B7%A5%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%E8%BF%9B%E5%BA%A6-%E4%B8%80%2F</url>
+    <content type="text"><![CDATA[今天在写前端登录验证在纠结用angular1 还是用 vue 最后还是选择了 vue原因有二： angular1好久没用了 有点生疏 最近写的都是用vue 比较亲切 当然这不是主要原因 vue是一个渐进式框架 angular1集成了太多用不到 vue想用什么引入插件就好 这个是主要原因 考虑再三 还是选择了vue 哈哈不过 http模块不准备引入axios 感觉兼容性有点不好 还是用vue-resource不知不觉代码没写多少 就测试了一下 真是编程五分钟 扯淡两小时啊 哈哈 晚上还有个班饭 不知不觉大三已经接近尾声 大学的生活马上结束了 要步入社会了 心中总有一些激动和震颤的心情 晚上还有楚乔传要看 哈哈 沉迷楚乔 无法自拔 -完]]></content>
+      <tags>
+        <tag>杂文</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[累...................]]></title>
+    <url>%2F2017%2F06%2F21%2F%E7%B4%AF%2F</url>
+    <content type="text"><![CDATA[在自习室一下午和一晚上 除了完成save操作 就是在晚上找登录的那个模板 总算找到个合适的 找登录模板比写模板更累 那么多模板 累屁了 明天继续干活啊 夜宵来一桶泡面就去看楚乔传 哈哈]]></content>
+      <tags>
+        <tag>闲文</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[写课程设计-员工管理系统有感]]></title>
+    <url>%2F2017%2F06%2F20%2F%E5%86%99%E8%AF%BE%E7%A8%8B%E8%AE%BE%E8%AE%A1-%E5%91%98%E5%B7%A5%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%E6%9C%89%E6%84%9F%2F</url>
+    <content type="text"><![CDATA[最近有两个星期的的课程设计 课题好多 选了一个自己能做出来的 那就是员工管理系统了 先设计简单的需求 写完再改 毕竟只有两个星期 要是写不完就尴尬了 其实肯定能写完 但是总该留点时间复习考试 自己得记性本来就不太好 还不好好的多看一下 哈哈 有了之前开发新闻发布系统的经验 这个员工管理系统的开发也就不算很难 如果要是扣细节的话 花费的时间估计也是不少 先简单的来写 后面的的在说 先实现员工和部门之间的关系 再实现员工添加 员工信息的修改 部门的添加 两个表我感觉足够了 先实现 后完善 是不是敏捷开发的思想(当然不仅仅这些) 哈哈由于之前有了开发springboot的经验 自己这次搭建剩了不少力气 今天也就实现了框架的搭建 和 实体类 又温习了一遍springDataRepository模块中的接口继承 CrudRepository&lt;实体类,long&gt;Service模块中依赖注入 所需要的Repository本人强烈建议直接用 CrudRepository中的save()来进行insert操作不建议用Query 和 Modifying ####写到一半自习室要关了 算了 回去写当然别忘了 Transition注解 如果失败 可以事务回滚当然我在一对多和一对一注解中的级联操作有了疑问其中注解中有两个关键属性 cascade 和fetchcascade 中有五个属性 ALL, PERSIST, MERGE, REMOVE, REFRESH, DETACH;这个五个属性和删除更改操作有关在员工对部门多对一的情况下如果所关联的部门被删除 则当前员工外键setNull如果所关联的部门发生更改 则当前员工也应该跟着修改那就应该选择MEGER属性和 DETACH 不要选 All注意的事项就这些–完]]></content>
+      <tags>
+        <tag>杂文</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[分享一下面试问题]]></title>
+    <url>%2F2017%2F06%2F19%2F%E5%88%86%E4%BA%AB%E4%B8%80%E4%B8%8B%E9%9D%A2%E8%AF%95%E9%97%AE%E9%A2%98%2F</url>
+    <content type="text"><![CDATA[今天下午准时收到了面试电话 心里非常开心 接下来分享一波面试问我的问题 面试官很和蔼 讲话也很好听 我也收益颇多 对于面试官的问题 我不喜欢用非常标准的套话来回答那个问题 也许我的回答很笼统 但是 我必须得明白 我回答的是什么 而不是仅仅把自己背的一些原理给面试官讲 那有什么用处呢？ 接下来分享一波面试的问题 首先问的是项目的具体内容 了解jvm吗 说一下jvm的内存区分为那几块 讲一下hashmap 说一下关于spring的控制反转和依赖注入 HashMap如何有序 天呐 当时瞬间懵逼了HashMap明明是无序的 不过我面试后上网查了一下 HashMap可以实现LinkedHashMap()这个类而进行迭代输出值 保证的是插入顺序 TreeMap是不允许key值和value值为null 不支持线程同步 HashMap支持一个为null的key 之后再有null的key会被覆盖 说一下树的遍历 二叉树的查找 二叉树的应用 html和xml的 dom树就是一个很好的例子 还有计算机文件夹目录就是很好的二叉树应用不过当时没有说出来 二分查找 冒泡排序算法思想 面试官给人的感觉很好 在面试过程中虽然也有一些发挥不太好 但是也收获了很多–完]]></content>
+      <tags>
+        <tag>面试笔记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[浅谈敏捷开发]]></title>
+    <url>%2F2017%2F06%2F18%2F%E6%B5%85%E8%B0%88%E6%95%8F%E6%8D%B7%E5%BC%80%E5%8F%91%2F</url>
+    <content type="text"><![CDATA[有些时候 如何使用一个框架和基础固然重要 编程语言好比一把剑 那么开发思想就是武功招式 剑固然重要 后期可以学习 更为重要的是对思想的理解 对开发模式的理解 敏捷开发不是一门具体的技术 而是一种理念 可以指导我们更加高效的开发传统开发的模式例子有：瀑布流的开发模式 也就是从需求到设计，从设计到编码，从编码到测试，从测试到提交大概这样的流程，要求每一个开发阶段都要做到最好。特别是前期阶段，设计的越完美，提交后的成本损失就越少。一个阶段的输出是下一个阶段的输入 开发后期才能看到软件模样 没有迭代和反馈 不适合需求变更的较多的项目 但是敏捷开发就不一样:敏捷开发集成了新型开发模式的共同特点，它重点强调： 1.敏捷就是“快”。快才可以适应目前社会的快节奏，要快就要发挥个人的个性思维多一些个性思维的增多。2.客户参与。以人为本，客户是软件的使用者，是业务理解的专家，没有客户的参与，开发者很难理解客户的真实需求。3.强调软件开发的产品是软件，而不是文档。文档是为软件开发服务的，而不是开发的主体。4.设计周密是为了最终软件的质量，但不表明设计比实现更重要。5.迭代。软件的功能是客户的需求，界面的操作是客户的“感觉”。对迭代的强调是缩短了软件版本的周期。6.小版本。快速功能的展现，看似简单，但对于复杂的客户需求合理地分割与总体上的统一，要很好地二者兼顾是不容易的。 –end]]></content>
+      <tags>
+        <tag>开发思想</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Hibernate(version4.3基于xml配置)总结]]></title>
+    <url>%2F2017%2F06%2F14%2FHibernate-version4-3%E5%9F%BA%E4%BA%8Exml%E9%85%8D%E7%BD%AE-%E6%80%BB%E7%BB%93%2F</url>
+    <content type="text"><![CDATA[又到了学期的末尾,马上要去实习 虽然还没有找到实习的地方 但是我相信 机会肯定会留给我的,顺便总结一波Hibernate基于4.3版本基于xml的总结干货虽然我推荐使用Hibernate5.0即以上注解版本 没有xml的繁琐配置 送上一波Hibernate5.0的用户手册和api 这次总结仅限学习 项目还是推荐使用5.0基于注解的版本 配置简单 使用方便 开箱即用 接下来开始讲解4.3的基于xml配置和xml映射文件的使用练习 从官网下载4.3的包 笔者用的的是Intellij的IDEA编译器 没用maven或者gradle包管理工具 只是纯属用于学习 在IDEA建立一个普通的JAVA工程导入下载的lib中的required的所有jar包 接下就开始开始配置 先送上一波官网关于4.3的用户手册 接下来在src中建立xml配置文件 建议命名为 hibernate.cfg.xml不过 在model层的映射文件推荐 类名.hbm.xml 配置文件怎么写 &lt;!DOCTYPE hibernate-configuration PUBLIC &quot;-//Hibernate/Hibernate Configuration DTD 3.0//EN&quot; &quot;http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd&quot;&gt; &lt;hibernate-configuration&gt; &lt;session-factory&gt; &lt;property name=&quot;show_sql&quot;&gt;true&lt;/property&gt; &lt;property name=&quot;hibernate.dialect&quot;&gt;org.hibernate.dialect.MySQLDialect&lt;/property&gt; &lt;property name=&quot;hibernate.connection.driver_class&quot;&gt;com.mysql.jdbc.Driver&lt;/property&gt; &lt;property name=&quot;hibernate.connection.url&quot;&gt;jdbc:mysql://localhost:3306/Hibernate&lt;/property&gt; &lt;property name=&quot;hibernate.connection.username&quot;&gt;root&lt;/property&gt; &lt;property name=&quot;hibernate.connection.password&quot;&gt;root&lt;/property&gt; &lt;!-- 当前线程只对应一个Session实例 --&gt; &lt;property name=&quot;hibernate.current_session_context_class&quot;&gt;thread&lt;/property&gt; &lt;!--四种属性 create update validate create-drop--&gt; &lt;property name=&quot;hbm2ddl.auto&quot;&gt;update&lt;/property&gt; &lt;mapping resource=&quot;Entity/user.xml&quot;/&gt; &lt;/session-factory&gt; &lt;/hibernate-configuration&gt; 上方四种属性的说明 create： 每次加载hibernate时都会删除上一次的生成的表，然后根据你的model类再重新来生成新表，哪怕两次没有任何改变也要这样执行，这就是导致数据库表数据丢失的一个重要原因。 create-drop ： 每次加载hibernate时根据model类生成表，但是sessionFactory一关闭,表就自动删除。 update(推荐)： 最常用的属性，第一次加载hibernate时根据model类会自动建立起表的结构（前提是先建立好数据库），以后加载hibernate时根据 model类自动更新表结构，即使表结构改变了但表中的行仍然存在不会删除以前的行。要注意的是当部署到服务器后，表结构是不会被马上建立起来的，是要等 应用第一次运行起来后才会。 validate ： 每次加载hibernate时，验证创建数据库表结构，只会和数据库中的表进行比较，不会创建新表，但是会插入新值。]]></content>
+      <tags>
+        <tag>java ORM框架</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[关于meta的referer属性]]></title>
+    <url>%2F2017%2F06%2F06%2F%E5%85%B3%E4%BA%8Emeta%E7%9A%84referer%E5%B1%9E%E6%80%A7%2F</url>
+    <content type="text"><![CDATA[Http协议头中的Referer主要用来让服务器判断来源页面, 即用户是从哪个页面来的,通常被网站用来统计用户来源,是从搜索页面来的,还是从其他网站链接过来,或是从书签等访问,以便网站合理定位. Referer有时也被用作防盗链, 即下载时判断来源地址是不是在网站域名之内, 否则就不能下载或显示,很多网站,如天涯就是通过Referer页面来判断用户是否能够下载图片. 在某些情况下，出于一些原因,想要控制页面发送给 server 的 referer 信息的情况下，可以使用这 referer metadata 参数 (也可以用h5属性a标签rel=”noreferer” 去掉refer)。 referer 的 metedata 参数可以设置为以下几种类型的值： never always origin default 如果在文档中插入 meta 标签，并且 name 属性的值为 referer，浏览器客户端将按照如下步骤处理这个标签： 1. 如果 meta 标签中没有 content 属性，则终止下面所有操作 2. 将 content 的值复制给 referrer-policy，并转换为小写 3. 检查 content 的值是否为上面 list 中的一个，如果不是，则将值置为 default 上述步骤之后，浏览器后续发起 http 请求的时候，会按照 content 的值，做出如下反应(下面 referer-policy 的值即 meta 标签中 content 的值)： 1.如果 referer-policy 的值为never：删除 http head 中的 referer 例: &lt;meta name=&quot;referrer&quot; content=&quot;never&quot;&gt; 2.如果 referer-policy 的值为default：如果当前页面使用的是 https 协议，而正要加载的资源使用的是普通的 http 协议，则将 http header 中的 referer 置为空 例: &lt;meta name=&quot;referrer&quot; content=&quot;default&quot;&gt; 3.如果 referer-policy 的值为 origin：只发送 origin 部分 例: &lt;meta name=&quot;referrer&quot; content=&quot;origin&quot;&gt; 4.如果 referer-policy 的值为 always：不改变http header 中的 referer 的值，注意：这种情况下，如果当前页面使用了 https 协议，而要加载的资源使用的是 http 协议，加载资源的请求头中也会携带 referer 例: &lt;meta name=&quot;referrer&quot; content=&quot;always&quot;&gt; 不过https跳转http会有refer头部丢失问题 由于 http规定 确实请求头没有Referer头部，原来是因为HTTP协议规定： Clients SHOULD NOT include a Referer header field in a (non-secure) HTTP request if the referring page was transferred with a secure protocol. 手动输入网址也会丢失refer 不要把Rerferer用在身份验证或者其他非常重要的检查上，因为Rerferer非常容易在客户端被改变。 参考 Meta referrer in wiki参考 译文]]></content>
+      <tags>
+        <tag>前端</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[关于meta的viewport说明以及移动端像素问题]]></title>
+    <url>%2F2017%2F06%2F05%2F%E5%85%B3%E4%BA%8Emeta%E7%9A%84viewport%E8%AF%B4%E6%98%8E%E4%BB%A5%E5%8F%8A%E7%A7%BB%E5%8A%A8%E7%AB%AF%E5%83%8F%E7%B4%A0%E9%97%AE%E9%A2%98%2F</url>
+    <content type="text"><![CDATA[在html的结构中 head中有meta标签中的 其中meta标签有viewport属性 如下 &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no&quot; /&gt; width：控制 viewport 的大小，可以指定的一个值，如果 600，或者特殊的值，如 device-width 为设备的宽度（单位为缩放为 100% 时的 CSS 的像素）。height：和 width 相对应，指定高度。initial-scale：初始缩放比例，也即是当页面第一次 load 的时候缩放比例。maximum-scale：允许用户缩放到的最大比例。minimum-scale：允许用户缩放到的最小比例。user-scalable：用户是否可以手动缩放总的来说viewport就是控制用户是否能在移动端放大或者缩小的一个meta属性 有一些允许最大缩放比例和最小缩放比例 接下来就要说说移动端手机像素的问题1.设备像素 指的是设备中使用的物理像素(Physic pixel)。这个单位用px表示，它是一个[相对绝对单位]: 即在同样一个设备上，每1个设备像素所代表的物理长度(如英寸)是固定不变的(即设备像素的绝对性);但在不同的设备之间，每1个设备像素所代表的物理长度(如英寸)是可以变化的(即设备像素的相对性); 2.what?说的是在不同设备之间 设备像素是变化的？那么 这有给前端开发工程师带来了难题 zzzzzzz 接下来说明一下大家买手机 介绍总有什么什么的分辨率 譬如 1920*1080p的 那么 根据公式 ppi = 1920的平方乘以1080的平方 除以 屏幕尺寸 屏幕尺寸就是手机的尺寸 买手机的参数会有说明 举个栗子就明白了 5英寸 5.5英寸 5.7英寸 这些数字应该很熟悉吧 zzzzzzzzz 讲了半天 ppi有什么用呢 专业的话说 用于度量计算机显示屏上像素的密度 即每英寸屏幕所拥有的像素数 例如魅族手机 有500dpi（瞎写的）就是一英尺能有500个像素 dpi越大 一英尺所容纳的像素越多 则字越小 zzzzzzzzzzzz 但是又想在不同手机中展示相同的尺寸 怎么办呢 3.我能想到的就是在移动端用rem 可能有更好地方法 但是我感觉我这方法简单定义好body字体 然后呢？ 我使用css预编译语言stylus带个张鑫旭老师stylus文档传送门定义一个mixin rem($val) $val/$default rem 说了这么多 解决方法就是这么简单zzzzzzzzzz 哈哈 --end]]></content>
+      <tags>
+        <tag>移动端 前端</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[js之作用域]]></title>
+    <url>%2F2017%2F06%2F03%2Fjs%E4%B9%8B%E4%BD%9C%E7%94%A8%E5%9F%9F%2F</url>
+    <content type="text"><![CDATA[下面一行代码 var value = 1; function foo() { console.log(value); } function bar() { var value = 2; foo(); } bar(); //结果是? 因为 JavaScript 采用的是词法作用域，函数的作用域在函数定义的时候就决定了。而与词法作用域相对的是动态作用域，函数的作用域是在函数调用的时候才决定的。如果是动态作用域 就会调用函数的作用域 则答案是 2答案 是 1参考 伢羽:JavaScript深入之词法作用域和动态作用域]]></content>
+      <tags>
+        <tag>前端 js</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[node干货之深入浅出1]]></title>
+    <url>%2F2017%2F06%2F03%2Fnode%E5%B9%B2%E8%B4%A7%E4%B9%8B%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA%2F</url>
+    <content type="text"><![CDATA[之前写了关于requirejs源码分析 想必对浏览器模块化原理有一定理解那这次就对服务器端node的commonJS进行源码分析 先来讲讲关于require 服务器端的require是运行时加载 这个和es6的import不是一样的 es6的import是编译时加载 现在来分析require的字符串格式 require可以加载自己的核心模块 第三方模块 js文件 json文件 以及编译好的c++模块 (.node结尾的)加载顺序是 : 1.先加载核心模块 比如 require(&quot;http&quot;); 2.试图在require的名称后面加上.js去搜索并加载 3. 试图在require的名称后面加上.json搜索并加载 列如 package.json 4.试图在后面加上.node搜索编译好的c++模块 看一下require的查找 require(X) from module at path Y//请求模块x在路径y 1. If X is a core module, //如果x是核心模块 a. return the core module b. STOP 2. If X begins with &apos;/&apos; 如果x是开始/ a. set Y to be the filesystem root /在项目根路径找 可能会找到“package.json&quot; 3. If X begins with &apos;./&apos; or &apos;/&apos; or &apos;../&apos; 如果X开始 ./或/或../ a. LOAD_AS_FILE(Y + X) 加载文件(x+y)后缀名依照上面顺序 b. LOAD_AS_DIRECTORY(Y + X) 或者找(x+y)的文件夹 4. LOAD_NODE_MODULES(X, dirname(Y)) //找系统目录下的node_modules 5. THROW &quot;not found&quot; //如果没有找到 抛出 not found LOAD_AS_FILE(X) 1. If X is a file, load X as JavaScript text. STOP 2. If X.js is a file, load X.js as JavaScript text. STOP 3. If X.json is a file, parse X.json to a JavaScript Object. STOP 4. If X.node is a file, load X.node as binary addon. STOP LOAD_INDEX(X) //找文件夹的index 1. If X/index.js is a file, load X/index.js as JavaScript text. STOP 2. If X/index.json is a file, parse X/index.json to a JavaScript object. STOP 3. If X/index.node is a file, load X/index.node as binary addon. STOP LOAD_AS_DIRECTORY(X) 1. If X/package.json is a file, a. Parse X/package.json, and look for &quot;main&quot; field. b. let M = X + (json main field) c. LOAD_AS_FILE(M) d. LOAD_INDEX(M) 2. LOAD_INDEX(X) LOAD_NODE_MODULES(X, START) 1. let DIRS=NODE_MODULES_PATHS(START) //找到项目路径的node_modules 2. for each DIR in DIRS: a. LOAD_AS_FILE(DIR/X) b. LOAD_AS_DIRECTORY(DIR/X) NODE_MODULES_PATHS(START) 1. let PARTS = path split(START) 2. let I = count of PARTS - 1 3. let DIRS = [] 4. while I &gt;= 0, a. if PARTS[I] = &quot;node_modules&quot; CONTINUE b. DIR = path join(PARTS[0 .. I] + &quot;node_modules&quot;) c. DIRS = DIRS + DIR d. let I = I - 1 5. return DIRS 官网 有句话这么在查找node_modules中说的 例require(“express”) If it is not found there, then it moves to the parent directory, and so on, until the root of the file system is reached.然后操作系统的node_modules中找 参考node的modules的api总结来说require的加载顺序 区分为带/和不带/的两种方式 先找缓存区带/的就是找路径如果不带/的 就先在核心模块找 如果是 stop 然后在项目的node_module但是,只要首次加载成功后,node就会缓存起来,它缓存的是编译后的二进制模块,保证以后的加载速度 看一下源码注释 zzzzzzzzzz // Check the cache for the requested file. // 1. If a module already exists in the cache: return its exports object. // 2. If the module is native: call `NativeModule.require()` with the // filename and return the result. // 3. Otherwise, create a new module for the file and save it to the cache. // Then have it load the file contents before returning its exports // object. module的源码地址]]></content>
+      <tags>
+        <tag>node</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[对自己的总结]]></title>
+    <url>%2F2017%2F06%2F03%2F%E5%AF%B9%E8%87%AA%E5%B7%B1%E7%9A%84%E6%80%BB%E7%BB%93%2F</url>
+    <content type="text"><![CDATA[在前端的路上的时间越来越长了,越学感觉自己学的越少,需要学的也越多,看过许多大神的经历,总结来说 就是”越努力 越幸运” 春招过去了 自己虽然没有任何面试的经历 看到旁边的同学 一个个走出去 虽然心也是很着急 但是也是也是很无奈 虽然现在也投了一些简历 不是自己不够强 而是别人比你强 不是自己不合适 而是别人比你合适 (只能这样安慰自己了zzzzzzz)]]></content>
+      <tags>
+        <tag>闲文</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[requireJS源码解析]]></title>
+    <url>%2F2017%2F06%2F01%2FrequireJS%2F</url>
+    <content type="text"><![CDATA[浅谈requireJS源码 版本 2.3.3开始是这样的作者定义一个立即执行函数 有两个参数 global 和 setTimeOut匿名函数开始是作者自己结合原生js定义的一些方法例如: function isFunction(it) { return ostring.call(it) === ‘[object Function]’; } ostring是什么? 原来是 Object.prototype.toString 大致流程是newContext函数开始设置handlers对象设置Module类设置context对象newContext函数完 返回值context对象设置req函数执行req({})设置define函数最后再次执行req({cfg})函数 -&gt; newContext 中的部分代码 代码太多 不罗列 开始定义一堆属性 然后定义一下内部要用到的函数 设置handlers对象 有三个属性值 require exports module -&gt; 设置Module类 模块类 -&gt; 设置context对象 关键函数 configure 主要设置cfg的属性 makeShimExports函数 对shime进行特殊处理(即加载特殊要提前依赖的模块) makerequir函数 定义加载的依赖模块函数 其中调用mix混合对象属性 nameToUrl函数 将模块名转换为路径 load函数 调用req的load completeLoad函数 完成加载函数 onScriptLoad函数 检查加载状态 如果加载完成 interactiveScript的值置为null 继续调用completeLoad函数 completeLoad继续调用takeGlobalQueue onScriptError 检查script标签错误 好像 少了点什么 诶 checkLoaded 检查加载的 在completeLoad函数中的最后调用checkLoaded 看一下核心函数 completeLoad: function (moduleName) { //接受参数模块名称 var found, args, mod, shim = getOwn(config.shim, moduleName) || {}, shExports = shim.exports; takeGlobalQueue(); //推入队列 while (defQueue.length) { args = defQueue.shift(); if (args[0] === null) { args[0] = moduleName; if (found) { break; } found = true; } else if (args[0] === moduleName) { found = true; } callGetModule(args); } context.defQueueMap = {}; mod = getOwn(registry, moduleName); if (!found &amp;&amp; !hasProp(defined, moduleName) &amp;&amp; mod &amp;&amp; !mod.inited) { if (config.enforceDefine &amp;&amp; (!shExports || !getGlobal(shExports))) { if (hasPathFallback(moduleName)) { return; } else { return onError(makeError(&apos;nodefine&apos;, &apos;No define call for &apos; + moduleName, null, [moduleName])); } } else { callGetModule([moduleName, (shim.deps || []), shim.exportsFn]); } } checkLoaded(); } -&gt; 核心函数req 接受四个参数 模块名数组 执行函数 错误处理 选项 req = requirejs = function(deps,callback,errback,optional){...} if (!isArray(deps) &amp;&amp; typeof deps !== &apos;string&apos;) { //如果第一个参数不是数组 是一个定义对象 config = deps; if (isArray(callback)) { deps = callback; callback = errback; errback = optional; } else { deps = []; } } if (config &amp;&amp; config.context) { contextName = config.context; } context = getOwn(contexts, contextName); if (!context) { context = contexts[contextName] = req.s.newContext(contextName); } if (config) { context.configure(config); } return context.require(deps, callback, errback); //调用context的require 间接调用context 的makeRequire 返回闭包函数 localRequire 然后调用 zzzzzzzzz 执行 intakeDefines（）函数 intakeDefines执行 takeGlobalQueue 将globalDefQueue push进context的队列 然后置为空数组 /* 检测 入口 data-main */ if (isBrowser &amp;&amp; !cfg.skipDataMain) { //判断是否是浏览器环境 isBrowser = !!(typeof window !== &apos;undefined&apos; &amp;&amp; typeof navigator !== &apos;undefined&apos; &amp;&amp; window.document), eachReverse(scripts(), function (script) { if (!head) { head = script.parentNode; } dataMain = script.getAttribute(&apos;data-main&apos;); if (dataMain) { if (!cfg.baseUrl &amp;&amp; mainScript.indexOf(&apos;!&apos;) === -1) { src = mainScript.split(&apos;/&apos;); mainScript = src.pop(); subPath = src.length ? src.join(&apos;/&apos;) + &apos;/&apos; : &apos;./&apos;; cfg.baseUrl = subPath; } mainScript = mainScript.replace(jsSuffixRegExp, &apos;&apos;); if (req.jsExtRegExp.test(mainScript)) { mainScript = dataMain; } cfg.deps = cfg.deps ? cfg.deps.concat(mainScript) : [mainScript]; //将data-main的属性值推入dep中 return true; } }); define函数 requireJS作者是这样定义的 define = function(name,deps,callback){…}查阅官方api define有三种写法第一种 包含三个参数 第一个参数是 模块的名称 第二个是引入的模块第三个是 执行的函数第二种 包含两个参数 第一个参数 是要引入的模块 第二个是要执行的函数第三种 包含一个参数 就是执行的函数源码是这样写的 外加我的注释 /* 参数逻辑判断 */ if (typeof name !== &apos;string&apos;) { //判断第一个参数是否是字符串 如果不是 callback = deps; //后面的参数向前移一位 deps = name; name = null; } if (!isArray(deps)) { //deps要引入模块是否是数组 如果不是 callback = deps; //后面的参数前移 deps = null; } /*如果传入参数中没有数组*/ if (!deps &amp;&amp; isFunction(callback)) { deps = []; if (callback.length) { // 判断callback实际接收的参数 callback .toString() // 将可执行函数转换为字符串 .replace(commentRegExp, commentReplace) /* 这里是个正则匹配 commentRegExp = /\/\*[\s\S]*?\*\/|([^:&quot;&apos;=]|^)\/\/.*$/mg 用来过滤注释用的*/ .replace(cjsRequireRegExp, function (match, dep) { deps.push(dep); //将require字段引入的push到dep中 }); deps = (callback.length === 1 ? [&apos;require&apos;] : [&apos;require&apos;, &apos;exports&apos;, &apos;module&apos;]).concat(deps); } } if (useInteractive) { //useInteractive在文初被设为false 这个应该是判断是IE(6-8)script标签做的特殊处理 (getInteractiveScript函数)ie6-8不支持script标签 支持onreadystatechange属性 有“uninitialized” – 原始状态 “loading” – 下载数据中..“loaded” – 下载完成 “interactive” – 还未执行完毕. “complete” – 脚本执行完毕. node = currentlyAddingScript || getInteractiveScript(); if (node) { if (!name) { name = node.getAttribute(&apos;data-requiremodule&apos;); //获得引入模块的名字 } context = contexts[node.getAttribute(&apos;data-requirecontext&apos;)]; //找出模块中的名字 } } if (context) { //将此模块加入队列中 context.defQueue.push([name, deps, callback]); context.defQueueMap[name] = true; } else { globalDefQueue.push([name, deps, callback]); } 看一下执行代码 req.exec = function (text) { /*将string文本eval zzzzzzzzzzz*/ return eval(text); }; 触发是 req.load这个函数开始执行 第二个参数是主要参数 即moduleName context.completeLoad(moduleName)模块加载完成执行 onScriptLoad 然后 再次执行completeLoad然后一层层加载 -end –转载声明出处]]></content>
+      <tags>
+        <tag>前端 js库</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[来谈谈AMD-CMD-commonJS]]></title>
+    <url>%2F2017%2F06%2F01%2F%E6%9D%A5%E8%B0%88%E8%B0%88AMD-CMD-commonJS%2F</url>
+    <content type="text"><![CDATA[CommonJS规范加载模块是同步的,只有加载完成才能执行后面的操作 而 AMD规范是非同步加载模块 允许指定回调函数 由于nodeJS主要用于服务 端的编程,模块文件一般都存在本地硬盘 所以加载起来比较快 不用考虑非同步 的加载方式所以commonJS规范比较实用 但是如果是浏览器环境 要从服务器 加载模块 就必须采用非同步的方式 因此浏览器一般采用AMD规范AMD规范： define([&apos;package/lib&apos;], function(lib){ function foo(){ lib.log(&apos;hello world!&apos;); } return { foo: foo }; }); AMD(“Asynchronous Module Definition”)规范允许输出的模块兼容CommonJS规范，这时define方法需要写成下面 这样： define(function (require, exports, module){ var someModule = require(&quot;someModule&quot;); var anotherModule = require(&quot;anotherModule&quot;); someModule.doTehAwesome(); anotherModule.doMoarAwesome(); exports.asplode = function (){ someModule.doTehAwesome(); anotherModule.doMoarAwesome(); }; }); CMD(“Common Module Definition”)是 SeaJS 在推广过程中对模块定义的规范化产出CMD和AMD的区别有以下几点： 1.对于依赖的模块AMD是提前执行，CMD是延迟执行。不过RequireJS从2.0开始，也改成可以延迟执行（根据写法不同，处理方式不通过）。2.CMD推崇依赖就近 用到才去require，AMD推崇依赖前置。 虽然 AMD也支持CMD写法，但依赖前置是官方文档的默认模块定义写法。]]></content>
+      <tags>
+        <tag>前端</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[谈谈js的内存泄漏]]></title>
+    <url>%2F2017%2F05%2F30%2F%E8%B0%88%E8%B0%88js%E7%9A%84%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%2F</url>
+    <content type="text"><![CDATA[javascript具有自动垃圾回收机制 执行环境会管理代码执行过程中的内存 原理: 垃圾收集器会定期中出不在使用的变量 然后释放其内存 标记清除 js中最为常见的回收方式就是标记清除算法 当变量进入环境时 在函数声明一个变量将这个变量标记为&apos;进入 环境&apos; 从逻辑上讲 永远不能释放进入环境的变量所占用的内存 因为只要执行留进入相应环境 就可能用到它们 当变量离开环境 时 将其标记为离开环境 function test(){ let aa = &apos;a&apos;; //被标记 进入环境 } test() //执行完毕 aa被标记为离开环境被回收 垃圾回收器会在运行时候给存储在内存中的所有变量加上标记 会去除环境中变量以及环境中变量引用的变量标记(闭包) 在此之后加上标记变量被视为准备删除的变量 最后 垃圾回收器完成清楚工作 到目前为止 IE,Firefox,Opera,Chrome,Safari实现的都是标记清除垃圾回收机制只不过垃圾收集时间不相同罢了 2.引用计数 function test(){ let a = {}; //a的引用计数为0 let b = a; // a的引用计数为1 let c = a ; //a的引用计数为2 let b = {} ; // a的引用计数减1 内存泄漏: 内存泄漏是指一块被分配的内存既不能使用,又不能回收,直到浏览器进程自动结束 在C++中 因为是手动管理内存,内存泄漏是经常出现的事情 在C#和Java等语言采用自动垃圾回收方法管理内存 正常使用时不会发生泄漏 浏览器也是采用自动垃圾回收方法管理内存.但由于浏览器垃圾回收方法由bug 会产生内存泄漏 内存泄漏的几种情况: 1. 当页面中元素被移除或者替换时，若元素绑定事件仍没有被移除,在IE中会做出恰当的处理 要手动移除事件不然会产生内存泄漏 2.循环引用 （IE7/8） let a = document.querySelector(&quot;.aa&quot;) let b = document.querySelector(&quot;.bb&quot;) a.f = b b.f = a 上方代码a b互相引用 虽然会在垃圾收集系统识别处理 但是在IE下如果 循环引用的是DOM或者是ActiveX对象 垃圾回收系统不会发现它们之间的循环关系与其他对象是隔离并释放它们 最终它们会被保存在内存中 解决办法手动解除循环引用 a.f = null 我们知道，IE中有一部分对象并不是原生js对象。例如，其内存泄露 DOM和BOM中的对 象就是使用C++以COM对象的形式实现的，而COM对象 的垃圾回收机制采用的就是引用计数 策略。因此，即使IE的js引擎采用标记清除策略来实现，但js访问的COM对象依然是基于引用计 数策略的。换句话说，只要在IE中涉及COM对象，就会存在循环引用的问题。 3. 闭包 闭包会维持函数内局部变量 使其得不到释放 4. 自动类型装箱转换 let a = &apos;aaaa&apos; console.log(a.length) s本是string类型而非object 没有length属性 所以访问length 会自动创建一个临时的String 对象 封装s 这个对象一定会泄漏 解决方法 console.log(new String(a).length) 5. 使用全局变量 也会导致内存 泄漏 6. 未清除的定时器 若定时器中的的元素被dom移除 定时器依然存在 同时定时器中的变量依然存在 不会被释放 let someResource = getData(); setInterval(function() { let node = document.getElementById(&apos;Node&apos;); if(node) { node.innerHTML = JSON.stringify(someResource)); } }, 1000); 参考 4 Types of Memory Leaks in JavaScript and How to Get Rid Of Them]]></content>
+      <tags>
+        <tag>前端</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[谈谈bfc]]></title>
+    <url>%2F2017%2F05%2F29%2F%E8%B0%88%E8%B0%88bfc%2F</url>
+    <content type="text"><![CDATA[BFC(Block Formating Context,块级格式化上下文)块级格式化上下文就是页面上的一个隔离的渲染区域 容器内部的子元素不过在布局上影响容器外的元素 反之也是如此如何产生BFC呢？ float的值不为none overflow值不为visible position 的值 为 position和fixed display的值为table-celltable-caption inline-block的任何一个常见的多栏布局 结合块级元素浮动 里面的元素在一个相对隔离的环境中运行说到BFC就要谈谈别的FC的 FC全称Formating Contexts 是W3C 中 CSS2.1规范中一个概念 他是页面中一块渲染区域有一套渲染规则 决定子元素如何定位 以及其他元素的关系和相互作用IFC(Inline Formating Contexts)直译为”内联格式化上下文”设置为display:inline-block会在外层产生IFC 可通过text-align:center使其水平居中GFC(GridLayout Formating Contexts,网格布局上下文)当一个元素display设置为grid时 此元素获得一个独立渲染的区域我们可以通过在网格容器（grid container）上定义网格定义行（grid definition rows）和网格定义列（grid definition columns）属性 各在网格项目（grid item）上定义网格行（grid row）和网格列（grid columns）为每一个网格项目（grid item）定义位置和空间。FFC(Flex Formatting Contexts,自适应格式化上下文) display:flex和inline-flex 会生成自适应容器]]></content>
+      <tags>
+        <tag>前端</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[谈谈cookie]]></title>
+    <url>%2F2017%2F05%2F29%2F%E8%B0%88%E8%B0%88cookie%2F</url>
+    <content type="text"><![CDATA[cookie为持久保存客户端数据提供了方便 分担了服务器存储的负担,但还是有很多的局限性第一: 每个特定的域名最懂生成20个cookieIE和Opera会清理近期最少使用的cookie Firefox会随机清理cookiecookie最大大约有4096个字节 为了兼容性 一般不能超过4095个字节IE提供了一种存储可以持久化用户数据叫做userData 从IE5.0开始每个数据最多128k 每个域名最多1Mcookie的优点:具有极高的可扩展型和可用性通过加密和安全传输技术(SSL)减少cookie被破解的可能性可以控制cookie的生命周期缺点Cookie数量和长度的限制 每个域下最多只能有20条cookie 每个cookie长度不能超过4KB具有安全性的问题 如果cookie被人拦截了 被转发 可以 获得session信息有的用户在浏览器的禁用cookie]]></content>
+      <tags>
+        <tag>前端</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[svg]]></title>
+    <url>%2F2017%2F05%2F28%2Fsvg%2F</url>
+    <content type="text"><![CDATA[SVG是可伸缩矢量图形SVG用于定义网络的基于矢量的图形SVG使用XML格式定义图形SVG再放大和缩小或改变尺寸其图形质量都不会发生变化浏览器支持IE9以上和Canvas的区别SVG是使用XML来描述2D图形的语言Canvas用过JavaScript来绘制2D图形SVG基于XML SVG没个DOM都是可用的 可以为某个元素附上事件处理器SVG不适合游戏应用Canvas是逐像素渲染 若位置发生变化 整个场景也需要重新绘制]]></content>
+      <tags>
+        <tag>前端</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[关于CSRF详解]]></title>
+    <url>%2F2017%2F05%2F28%2F%E5%85%B3%E4%BA%8ECSRF%E8%AF%A6%E8%A7%A3%2F</url>
+    <content type="text"><![CDATA[CSRF(Cross-site request forgery)跨站请求伪造攻击者盗用了你的身份 以你的名义发送恶意请求准备求来说就是1.登录受信任网站A，并在本地生成Cookie。2.在不登出A的情况下，访问危险网站B。如何防御呢CSRF的防御可以从服务端和客户端两方面着手，防御效果是从服务端着手效果比较好，现在一般的CSRF防御也都在服务端进行。在提交请求时服务器增加随机数在提交时进行后端验证验证码 在表单提交时增加随机验证码即随机字符串]]></content>
+      <tags>
+        <tag>前端安全</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[页面加载进行优化]]></title>
+    <url>%2F2017%2F05%2F28%2F%E9%A1%B5%E9%9D%A2%E5%8A%A0%E8%BD%BD%E8%BF%9B%E8%A1%8C%E4%BC%98%E5%8C%96%2F</url>
+    <content type="text"><![CDATA[减少http请求 (使用sprite图 对js文件进行合并加载)优化图片文件 减少其尺寸压缩js css文件 有利于网络传输服务器端使用gzip压缩方法 gzip是一个非常简单的方法 由于CSS文件和HTML文件使用了大量重复的文字 使用GZIP压缩公用字符串减少页面和样式表70%的请求把网页内容写的使压缩更有效保持引号的一致性优化CSS和JavaScript 网址后面加’/‘ 不加’/‘服务器会多一次判断过程加直接访问网站根目录下的默认文件对图片标明高度和宽度 若浏览未找到这两个参数 则需要边下载边计算大小不仅影响速度 也影响用户体验]]></content>
+      <tags>
+        <tag>前端</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[详解之xss漏洞]]></title>
+    <url>%2F2017%2F05%2F25%2F%E8%AF%A6%E8%A7%A3%E4%B9%8Bxss%E6%BC%8F%E6%B4%9E%2F</url>
+    <content type="text"><![CDATA[今天突然又翻一下关于xss漏洞的资料 xss又称css（Cross Site Scripting）跨站脚本攻击之前只是以为xss只是用户输入过滤不当而造成 然而发现原来里面的学问这么深 xss分为三种类型：存储型xss 反射性xss dom-xss 存储型的xss 数据库中存有存在的xss攻击的数据，返回给客户端。若数据未被转义被浏览器渲染 有可能导致xss攻击 反射性xss 将用户输入存在的XSS攻击数据发送给后台 后台并未对数据进行存储 也未经过任何过滤 就有可能导致xss攻击 DOM-XSS 用户点击链接参数带有js语言 后台未对url参数进行过滤 返回给客户端 前端直接从url中获得参数 例如利用BOM对象location中的href进行正则匹配获得带有xss漏洞的脚本参数 攻击者利用这个漏洞做出无法想象的事情 xss攻击无处在 如何进行防御 xss漏洞的防御对输入端和输出端统一进行过滤 对于前端 有一个xss过滤很好的类库 毕竟术业有专攻 传送门 后端 有一个不同的使用方式，编码方式不同，java现成的工具可以用——ESAPI，不同位置如何转义可参照ESAPI文档，传送门 比如属性值转义： String safe = ESAPI.encoder().encodeForHTMLAttribute(request.getParameter( “input” ) ); php简单过滤: $safe = htmlspecialchars($this-&gt;input-&gt;get/post(“input”)) 前端要做好的工作 要有良好的css设计 html标签a的href进行规范化 避免用JavaScript打开一个新的窗口 不要使用全局变量 将不可信的数据例如白名单 提交数据时进行校验 –完]]></content>
+      <tags>
+        <tag>前端安全</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Html5离线缓存机制 manifest]]></title>
+    <url>%2F2017%2F05%2F24%2FHtml5%E7%A6%BB%E7%BA%BF%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6-manifest%2F</url>
+    <content type="text"></content>
+  </entry>
+  <entry>
+    <title><![CDATA[用户输入了网址,发生了什么事情？]]></title>
+    <url>%2F2017%2F05%2F22%2F%E7%94%A8%E6%88%B7%E8%BE%93%E5%85%A5%E4%BA%86%E7%BD%91%E5%9D%80-%E5%8F%91%E7%94%9F%E4%BA%86%E4%BB%80%E4%B9%88%E4%BA%8B%E6%83%85%EF%BC%9F%2F</url>
+    <content type="text"><![CDATA[第1步，查找浏览器缓存。 浏览器会检查缓存中有没有这个域名对应的解析过的IP地址，如果缓存中有，这个解析过程就将结束。浏览器 缓存域名也是有限制的，不仅浏览器缓存大小有限制，而且缓存的时间也有限制，通常情况下为几分钟到几小 时不等。这个缓存时间太长和太短都不好，如果缓存时间太长，一旦域名被解析到的IP有变化，会导致被客户端缓存的域名无法解析到变化后的IP地址，以致该域名不能正常解析，这段时间内有可能会有一部分用户无法访问网站。如果时间设置太短，会导致用户每次访问网站都要重新解析一次域名。 第2步，查找系统缓存。 如果用户的浏览器缓存中没有，浏览器会查找操作系统缓存中是否有这个域名对应的DNS解析结果。其实操作系统也会有一个域名解析的过程，在Windows中可以通过C:\Windows\System32\drivers\etc\hosts文件来设置，你可以将任何域名解析到任何能够访问的IP地址。如果你在这里指定了一个域名对应的IP地址，那么浏览器会首先使用这个IP地址。例如，我们在测试时可以将一个域名解析到一台测试服务器上，这样不用修改任何代码就能测试到单独服务器上的代码的业务逻辑是否正确。正是因为有这种本地DNS解析的规程，所以黑客就有可能通过修改你的域名解析来把特定的域名解析到它指定的IP地址上，导致这些域名被劫持。 第3步，查找路由器缓存。 如果系统缓存中也找不到，那么查询请求就会发向路由器 第4步，查找ISP DNS 缓存。 能查询ISP DNS 缓存服务器了。在我们的网络配置中都会有”DNS服务器地址”这一项，操作系统会把这个域名发送给这里设置的DNS，也就是本地区的域名服务器，通常是提供给你接入互联网的应用提供商。这个专门的域名解析服务器性能都会很好，它们一般都会缓存域名解析结果，当然缓存时间是受域名的失效时间控制的，一般缓存空间不是影响域名失效的主要因素。大约80%的域名解析都到这里就已经完成了，所以ISP DNS主要承担了域名的解析工作。 第5步，递归搜索。 在前面都没有办法命中的DNS缓存的情况下,(1)本地 DNS服务器即将该请求转发到互联网上的根域（即一个完整域名最后面的那个点，通常省略不写）。(2)根域将所要查询域名中的顶级域（假设要查询ke.qq.com，该域名的顶级域就是com）的服务器IP地址返回到本地DNS。(3) 本地DNS根据返回的IP地址，再向顶级域（就是com域）发送请求。(4) com域服务器再将域名中的二级域（即ke.qq.com中的qq）的IP地址返回给本地DNS。(5) 本地DNS再向二级域发送请求进行查询。(6) 之后不断重复这样的过程，直到本地DNS服务器得到最终的查询结果，并返回到主机。这时候主机才能通过域名访问该网站。]]></content>
+      <tags>
+        <tag>HTTP</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[chrome-56版本以上的prevent事件]]></title>
+    <url>%2F2017%2F05%2F20%2Fchrome-56%E7%89%88%E6%9C%AC%E4%BB%A5%E4%B8%8A%E7%9A%84prevent%E4%BA%8B%E4%BB%B6%2F</url>
+    <content type="text"><![CDATA[Unable to preventDefault inside passive event listener due to target being treated as passive. See https://www.chromestatus.com/...不能阻止浏览器默认行为当你触摸滑动页面时，页面应该跟随手指一起滚动。而此时你绑定了一个 touchstart 事件，你的事件大概执行 200 毫秒。这时浏览器就犯迷糊了：如果你在事件绑定函数中调用了 preventDefault，那么页面就不应该滚动，如果你没有调用 preventDefault，页面就需要滚动。但是你到底调用了还是没有调用，浏览器不知道。只能先执行你的函数，等 200 毫秒后，绑定事件执行完了，浏览器才知道，“哦，原来你没有阻止默认行为，好的，我马上滚”。此时，页面开始滚。 oh no 所以为了让页面滚动变得更为流畅，从 chrome56 开始，在 window、document 和 body 上注册的 touchstart 和 touchmove 事件处理函数，会默认为是 passive: true。浏览器忽略默认事件preventDefault() 可以第一时间滚动了。解决方案 注册事件是添加 { passive: false }window.addListenEvent(“touchstart”,fn,{passive: false}) 可以阻止默认事件但是也同时降低了性能 参考Making touch scrolling fast by default 需科学上网 尽管对于移动端的Safari来说这仍然很有必要,网站不应该依赖在touchstart和touchmove监听器上调用preventDefault()来阻止默认行为.因为在Chrome中,这样做已经不被支持和提倡了.开发者应该在那些需要禁用滚动和缩放的元素上增加touch-actionCSS属性,好在任何touch事件出现前通知到浏览器.为了阻止tap(就像是一个click事件的产生)的默认行为,在touchend监听器中调用preventDefault().这就是第二种方案应用 CSS 属性 touch-action: none; 这样任何触摸事件都不会产生默认行为，但是 touch 事件照样触发。参考 css文档]]></content>
+      <tags>
+        <tag>移动端</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Velocity.js介绍及使用]]></title>
+    <url>%2F2017%2F05%2F19%2FVelocity-js%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8%2F</url>
+    <content type="text"><![CDATA[在Web上使用CSS实现动画并不是唯一的方式，我们也可以使用JS来实现，并且JS还有一些CSS无法替代的优势。Velocity模仿了jQuery的语法，可以完美地同jQuery协作用法 $element.velocity(“scroll”, 1000);其中$element是dom结点$element.velocity({ left: “50px” }, 500, “ease-in-out”,callback);这个用过jQuery的很好懂了吧 $element .velocity(“scroll”, { duration: 1000 }) .velocity({ opacity: 1 });//默认的滚动沿y轴方向，想改到x轴方向的话可以使用axis选项：$element.velocity(“scroll”, { axis: “x” });Transforms 想要结合CSS和JS设计动画？ 设置一些CSS变换规则，允许你做一些2D或3D的动画，比如平移，扩大，旋转。注意这些变换不会影响元素在网页中的位置，也不会影响该元素周围 的元素在页面中的位置。 Velocity支持下面的变换： translateX: 从左向右沿x轴移动元素translateY: 从上到下沿y轴移动元素rotateZ: 关于z轴旋转元素rotateX: 关于x轴旋转元素（看起来由里向外）rotateY: 关于y轴旋转元素（由左到右）scaleX: 成倍数改变元素宽度scaleY: 成倍数改变元素高度 tip:要用velocity要先引入哦！ –end参考文章 Intro to JavaScript Animation]]></content>
+      <tags>
+        <tag>js库</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[coding 中如何解决静态资源无法加载的问题]]></title>
+    <url>%2F2017%2F05%2F17%2Fcoding-%E4%B8%AD%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3%E9%9D%99%E6%80%81%E8%B5%84%E6%BA%90%E6%97%A0%E6%B3%95%E5%8A%A0%E8%BD%BD%E7%9A%84%E9%97%AE%E9%A2%98%2F</url>
+    <content type="text"><![CDATA[博客的事情搞了一天了,现在总算完成了大半工作,记coding Pages中静态资源无法加载 找了半天是因为项目名称和自己的用户名称不一致所导致 –end]]></content>
+  </entry>
+  <entry>
+    <title><![CDATA[git建立ssh连接]]></title>
+    <url>%2F2017%2F05%2F15%2Fgit%E5%BB%BA%E7%AB%8Bssh%E8%BF%9E%E6%8E%A5%2F</url>
+    <content type="text"><![CDATA[命令行输入 ssh-keygen -t rsa -C “github注册时的邮箱” ssh-agent -s eval ssh-agent -sssh-add ssh-add ~/.ssh/id_rsa clip &lt; ~/.ssh/id_rsa.pub 然后到Github里面，点击右上角的设置图标Settings,找到SSH keys,Key就直接粘贴,然后点Add SSH key，最后会让你重新输入下gitHub的密码 ssh -T git@github.com 输入yes所有指令均在git-bash中输入]]></content>
+  </entry>
+  <entry>
+    <title><![CDATA[win10下安装MarkdownPad不能预览]]></title>
+    <url>%2F2017%2F05%2F10%2Fwin10%E4%B8%8B%E5%AE%89%E8%A3%85MarkdownPad%E4%B8%8D%E8%83%BD%E9%A2%84%E8%A7%88%20%2F</url>
+    <content type="text"><![CDATA[win10下安装MarkdownPad不能预览解决办法 安装下载安装Awesomium 1.6.6 SDK.]]></content>
+  </entry>
+</search>

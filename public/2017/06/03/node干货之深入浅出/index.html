@@ -1,0 +1,567 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>node干货之深入浅出1 | 王帅的博客</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="wang">
+    
+
+    
+    <meta name="description" content="之前写了关于requirejs源码分析  想必对浏览器模块化原理有一定理解那这次就对服务器端node的commonJS进行源码分析 先来讲讲关于require  服务器端的require是运行时加载 这个和es6的import不是一样的  es6的import是编译时加载  现在来分析require的字符串格式  require可以加载自己的核心模块 第三方模块 js文件  json文件 以及">
+<meta name="keywords" content="node">
+<meta property="og:type" content="article">
+<meta property="og:title" content="node干货之深入浅出1">
+<meta property="og:url" content="https://951759534.github.io/2017/06/03/node干货之深入浅出/index.html">
+<meta property="og:site_name" content="王帅的博客">
+<meta property="og:description" content="之前写了关于requirejs源码分析  想必对浏览器模块化原理有一定理解那这次就对服务器端node的commonJS进行源码分析 先来讲讲关于require  服务器端的require是运行时加载 这个和es6的import不是一样的  es6的import是编译时加载  现在来分析require的字符串格式  require可以加载自己的核心模块 第三方模块 js文件  json文件 以及">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-10-11T05:04:06.033Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="node干货之深入浅出1">
+<meta name="twitter:description" content="之前写了关于requirejs源码分析  想必对浏览器模块化原理有一定理解那这次就对服务器端node的commonJS进行源码分析 先来讲讲关于require  服务器端的require是运行时加载 这个和es6的import不是一样的  es6的import是编译时加载  现在来分析require的字符串格式  require可以加载自己的核心模块 第三方模块 js文件  json文件 以及">
+
+    
+    <link rel="alternative" href="/atom.xml" title="王帅的博客" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="王帅的博客" title="王帅的博客"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="王帅的博客">王帅的博客</a></h1>
+				<h2 class="blog-motto">慢慢积累 慢慢变强</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:951759534.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/06/03/node干货之深入浅出/" title="node干货之深入浅出1" itemprop="url">node干货之深入浅出1</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="wang" target="_blank" itemprop="author">wang</a>
+		
+  <p class="article-time">
+    <time datetime="2017-06-03T12:00:50.000Z" itemprop="datePublished"> 发表于 2017-06-03</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			
+		
+		</div>
+		
+		<p>  之前写了关于requirejs源码分析  想必对浏览器模块化原理有一定理解<br>那这次就对服务器端node的commonJS进行源码分析 先来讲讲关于require<br>  服务器端的require是运行时加载 这个和es6的import不是一样的  es6的import是编译时加载  现在来分析require的字符串格式<br>  require可以加载自己的核心模块 第三方模块 js文件  json文件 以及编译好的c++模块  (.node结尾的)<br>加载顺序是 :  </p>
+<blockquote>
+<pre><code>1.先加载核心模块 比如 require(&quot;http&quot;);
+2.试图在require的名称后面加上.js去搜索并加载
+3. 试图在require的名称后面加上.json搜索并加载 列如 package.json  
+4.试图在后面加上.node搜索编译好的c++模块   
+</code></pre><p>看一下require的查找   </p>
+</blockquote>
+<pre><code>require(X) from module at path Y//请求模块x在路径y
+1. If X is a core module,   //如果x是核心模块
+   a. return the core module
+   b. STOP
+2. If X begins with &apos;/&apos;   如果x是开始/
+   a. set Y to be the filesystem root /在项目根路径找  可能会找到“package.json&quot;
+3. If X begins with &apos;./&apos; or &apos;/&apos; or &apos;../&apos;  如果X开始
+    ./或/或../
+   a. LOAD_AS_FILE(Y + X)  加载文件(x+y)后缀名依照上面顺序
+   b. LOAD_AS_DIRECTORY(Y + X) 或者找(x+y)的文件夹
+4. LOAD_NODE_MODULES(X, dirname(Y))  //找系统目录下的node_modules
+5. THROW &quot;not found&quot; //如果没有找到  抛出 not found
+
+LOAD_AS_FILE(X)
+1. If X is a file, load X as JavaScript text.  STOP
+2. If X.js is a file, load X.js as JavaScript text.  STOP
+3. If X.json is a file, parse X.json to a JavaScript Object.  STOP
+4. If X.node is a file, load X.node as binary addon.  STOP
+
+LOAD_INDEX(X)  //找文件夹的index
+1. If X/index.js is a file, load X/index.js as JavaScript text.  STOP
+2. If X/index.json is a file, parse X/index.json to a JavaScript object. STOP
+3. If X/index.node is a file, load X/index.node as binary addon.  STOP
+
+LOAD_AS_DIRECTORY(X)
+1. If X/package.json is a file,
+   a. Parse X/package.json, and look for &quot;main&quot; field.
+   b. let M = X + (json main field)
+   c. LOAD_AS_FILE(M)
+   d. LOAD_INDEX(M)
+2. LOAD_INDEX(X)
+
+LOAD_NODE_MODULES(X, START)
+1. let DIRS=NODE_MODULES_PATHS(START)  //找到项目路径的node_modules
+2. for each DIR in DIRS:
+   a. LOAD_AS_FILE(DIR/X)
+   b. LOAD_AS_DIRECTORY(DIR/X)
+
+NODE_MODULES_PATHS(START)
+1. let PARTS = path split(START)
+2. let I = count of PARTS - 1
+3. let DIRS = []
+4. while I &gt;= 0,
+   a. if PARTS[I] = &quot;node_modules&quot; CONTINUE
+   b. DIR = path join(PARTS[0 .. I] + &quot;node_modules&quot;)
+   c. DIRS = DIRS + DIR
+   d. let I = I - 1
+5. return DIRS  
+</code></pre><p>官网 有句话这么在查找node_modules中说的 例require(“express”)</p>
+<blockquote>
+<p>If it is not found there, then it moves to the parent directory, and so on, until the root of the file system is reached.<br>然后操作系统的node_modules中找   </p>
+</blockquote>
+<p>参考<a href="https://nodejs.org/api/modules.html#modules_all_together" target="_blank" rel="noopener">node的modules的api</a><br>总结来说require的加载顺序 区分为带/和不带/的两种方式  先找缓存区<br>带/的就是找路径<br>如果不带/的 就先在核心模块找 如果是 stop 然后在项目的node_module<br>但是,只要首次加载成功后,node就会缓存起来,它缓存的是编译后的二进制模块,保证以后的加载速度  看一下源码注释  zzzzzzzzzz    </p>
+<blockquote>
+<pre><code>// Check the cache for the requested file.
+ // 1. If a module already exists in the cache: return its exports object.
+ // 2. If the module is native: call `NativeModule.require()` with the
+ //    filename and return the result.
+ // 3. Otherwise, create a new module for the file and save it to the cache.
+ //    Then have it load  the file contents before returning its exports
+ //    object. 
+</code></pre><p><a href="https://github.com/nodejs/node/blob/master/lib/module.js" target="_blank" rel="noopener">module的源码地址</a></p>
+</blockquote>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/node/">node</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="https://951759534.github.io/2017/06/03/node干货之深入浅出/" data-title="node干货之深入浅出1 | 王帅的博客" data-tsina="undefined" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2017/06/03/js之作用域/" title="js之作用域">
+  <strong>上一篇：</strong><br/>
+  <span>
+  js之作用域</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2017/06/03/对自己的总结/"  title="对自己的总结">
+ <strong>下一篇：</strong><br/> 
+ <span>对自己的总结
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ 
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/前端/" title="前端">前端<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/杂文/" title="杂文">杂文<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/前端安全/" title="前端安全">前端安全<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/HTTP/" title="HTTP">HTTP<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/闲文/" title="闲文">闲文<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/移动端/" title="移动端">移动端<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/前端-js/" title="前端 js">前端 js<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/js库/" title="js库">js库<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/git/" title="git">git<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/移动端-前端/" title="移动端 前端">移动端 前端<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/java-ORM框架/" title="java ORM框架">java ORM框架<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/面试笔记/" title="面试笔记">面试笔记<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/node/" title="node">node<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/开发思想/" title="开发思想">开发思想<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/前端-js库/" title="前端 js库">前端 js库<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+    </ul>
+</div>
+
+  
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> 专注 <br/>
+			to be better</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com//u/1583479425" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/951759534" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:951759534@qq.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo"></a>© 2018
+		
+		<a href="/about" target="_blank" title="wang">wang</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

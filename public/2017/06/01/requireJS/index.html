@@ -1,0 +1,659 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>requireJS源码解析 | 王帅的博客</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="wang">
+    
+
+    
+    <meta name="description" content="浅谈requireJS源码   版本 2.3.3开始是这样的作者定义一个立即执行函数 有两个参数 global  和 setTimeOut匿名函数开始是作者自己结合原生js定义的一些方法例如:   function isFunction(it) {        return ostring.call(it) === ‘[object Function]’;    } ostring是什么?  原">
+<meta name="keywords" content="前端 js库">
+<meta property="og:type" content="article">
+<meta property="og:title" content="requireJS源码解析">
+<meta property="og:url" content="https://951759534.github.io/2017/06/01/requireJS/index.html">
+<meta property="og:site_name" content="王帅的博客">
+<meta property="og:description" content="浅谈requireJS源码   版本 2.3.3开始是这样的作者定义一个立即执行函数 有两个参数 global  和 setTimeOut匿名函数开始是作者自己结合原生js定义的一些方法例如:   function isFunction(it) {        return ostring.call(it) === ‘[object Function]’;    } ostring是什么?  原">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-10-11T05:04:06.033Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="requireJS源码解析">
+<meta name="twitter:description" content="浅谈requireJS源码   版本 2.3.3开始是这样的作者定义一个立即执行函数 有两个参数 global  和 setTimeOut匿名函数开始是作者自己结合原生js定义的一些方法例如:   function isFunction(it) {        return ostring.call(it) === ‘[object Function]’;    } ostring是什么?  原">
+
+    
+    <link rel="alternative" href="/atom.xml" title="王帅的博客" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="王帅的博客" title="王帅的博客"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="王帅的博客">王帅的博客</a></h1>
+				<h2 class="blog-motto">慢慢积累 慢慢变强</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:951759534.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/06/01/requireJS/" title="requireJS源码解析" itemprop="url">requireJS源码解析</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="wang" target="_blank" itemprop="author">wang</a>
+		
+  <p class="article-time">
+    <time datetime="2017-06-01T11:27:01.000Z" itemprop="datePublished"> 发表于 2017-06-01</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			
+		
+		</div>
+		
+		<p>浅谈requireJS源码   版本 2.3.3<br>开始是这样的<br>作者定义一个立即执行函数 有两个参数 global  和 setTimeOut<br>匿名函数开始是作者自己结合原生js定义的一些方法<br>例如:</p>
+<blockquote>
+<p> function isFunction(it) {<br>        return ostring.call(it) === ‘[object Function]’;<br>    }<br> ostring是什么?  原来是 Object.prototype.toString     </p>
+</blockquote>
+<p>大致流程是<br>newContext函数开始<br>设置handlers对象<br>设置Module类<br>设置context对象<br>newContext函数完  返回值context对象<br>设置req函数<br>执行req({})<br>设置define函数<br>最后再次执行req({cfg})函数</p>
+<blockquote>
+<p>  -&gt;   newContext 中的部分代码 代码太多 不罗列<br>          开始定义一堆属性  然后定义一下内部要用到的函数     设置handlers对象   </p>
+</blockquote>
+<pre><code>有三个属性值 require  exports  module  
+</code></pre><blockquote>
+<p>  -&gt;  设置Module类   模块类</p>
+</blockquote>
+<blockquote>
+<p>  -&gt;  设置context对象  </p>
+</blockquote>
+<pre><code>关键函数  configure 主要设置cfg的属性   makeShimExports函数  对shime进行特殊处理(即加载特殊要提前依赖的模块)
+makerequir函数 定义加载的依赖模块函数   
+其中调用mix混合对象属性  
+nameToUrl函数 将模块名转换为路径 
+load函数  调用req的load
+ completeLoad函数 完成加载函数  
+onScriptLoad函数  检查加载状态 如果加载完成 
+interactiveScript的值置为null   继续调用completeLoad函数  completeLoad继续调用takeGlobalQueue 
+onScriptError 检查script标签错误
+好像    少了点什么  诶   checkLoaded  检查加载的 
+在completeLoad函数中的最后调用checkLoaded
+看一下核心函数 
+ completeLoad: function (moduleName) {  //接受参数模块名称
+        var found, args, mod,
+            shim = getOwn(config.shim, moduleName) || {},
+            shExports = shim.exports;
+        takeGlobalQueue();    //推入队列
+        while (defQueue.length) {
+            args = defQueue.shift();
+            if (args[0] === null) {
+                args[0] = moduleName;
+                if (found) {
+                    break;
+                }
+                found = true;
+            } else if (args[0] === moduleName) {
+                found = true;
+            }
+
+            callGetModule(args);
+        }
+        context.defQueueMap = {};
+        mod = getOwn(registry, moduleName);
+
+        if (!found &amp;&amp; !hasProp(defined, moduleName) &amp;&amp; mod &amp;&amp; !mod.inited) {
+            if (config.enforceDefine &amp;&amp; (!shExports || !getGlobal(shExports))) {
+                if (hasPathFallback(moduleName)) {
+                    return;
+                } else {
+                    return onError(makeError(&apos;nodefine&apos;,
+                                     &apos;No define call for &apos; + moduleName,
+                                     null,
+                                     [moduleName]));
+                }
+            } else {
+                callGetModule([moduleName, (shim.deps || []), shim.exportsFn]);
+            }
+        }
+
+        checkLoaded();
+    }
+</code></pre><blockquote>
+<p>  -&gt; 核心函数req  接受四个参数  模块名数组  执行函数  错误处理 选项</p>
+<pre><code> req = requirejs = function(deps,callback,errback,optional){...}
+ if (!isArray(deps) &amp;&amp; typeof deps !== &apos;string&apos;) {  //如果第一个参数不是数组 是一个定义对象 
+      config = deps;       
+      if (isArray(callback)) {
+          deps = callback;
+          callback = errback;
+          errback = optional;
+      } else {
+          deps = [];
+      }
+  }
+  if (config &amp;&amp; config.context) {    
+      contextName = config.context;
+  }
+  context = getOwn(contexts, contextName);
+  if (!context) {
+      context = contexts[contextName] = req.s.newContext(contextName);
+  }
+  if (config) {
+      context.configure(config);
+  }
+  return context.require(deps, callback, errback);  //调用context的require  间接调用context 的makeRequire  返回闭包函数 localRequire 然后调用  zzzzzzzzz  执行 intakeDefines（）函数  intakeDefines执行 takeGlobalQueue 将globalDefQueue push进context的队列 然后置为空数组
+          /* 检测 入口 data-main */  
+if (isBrowser &amp;&amp; !cfg.skipDataMain) {  //判断是否是浏览器环境          isBrowser = !!(typeof window !== &apos;undefined&apos; &amp;&amp; typeof navigator !== &apos;undefined&apos; &amp;&amp; window.document),
+  eachReverse(scripts(), function (script) {
+      if (!head) {
+          head = script.parentNode;
+      } dataMain = script.getAttribute(&apos;data-main&apos;);
+      if (dataMain) {
+      if (!cfg.baseUrl &amp;&amp; mainScript.indexOf(&apos;!&apos;) === -1) {
+              src = mainScript.split(&apos;/&apos;);
+              mainScript = src.pop();
+              subPath = src.length ? src.join(&apos;/&apos;)  + &apos;/&apos; : &apos;./&apos;;
+              cfg.baseUrl = subPath;
+          }
+          mainScript = mainScript.replace(jsSuffixRegExp, &apos;&apos;);
+          if (req.jsExtRegExp.test(mainScript)) {
+              mainScript = dataMain;
+          }    
+          cfg.deps = cfg.deps ? cfg.deps.concat(mainScript) : [mainScript];   //将data-main的属性值推入dep中
+          return true;
+      }
+  });
+</code></pre></blockquote>
+<p>define函数   </p>
+<p>requireJS作者是这样定义的   </p>
+<blockquote>
+<p>define = function(name,deps,callback){…}<br>查阅官方api  define有三种写法<br>第一种  包含三个参数  第一个参数是 模块的名称 第二个是引入的模块<br>第三个是 执行的函数<br>第二种  包含两个参数  第一个参数 是要引入的模块  第二个是要执行的函数<br>第三种  包含一个参数  就是执行的函数<br>源码是这样写的 外加我的注释 </p>
+</blockquote>
+<pre><code>  /*  参数逻辑判断  */
+if (typeof name !== &apos;string&apos;) {   //判断第一个参数是否是字符串 如果不是
+        callback = deps;   //后面的参数向前移一位
+        deps = name;
+        name = null;
+    }
+    if (!isArray(deps)) {    //deps要引入模块是否是数组  如果不是  
+        callback = deps;      //后面的参数前移
+        deps = null;
+    }
+    /*如果传入参数中没有数组*/
+    if (!deps &amp;&amp; isFunction(callback)) {   
+        deps = [];
+        if (callback.length) {  //  判断callback实际接收的参数
+            callback
+                .toString()  // 将可执行函数转换为字符串
+                .replace(commentRegExp, commentReplace) /* 这里是个正则匹配 commentRegExp = /\/\*[\s\S]*?\*\/|([^:&quot;&apos;=]|^)\/\/.*$/mg 用来过滤注释用的*/
+                .replace(cjsRequireRegExp, function (match, dep) {
+                    deps.push(dep);  //将require字段引入的push到dep中   
+                });
+            deps = (callback.length === 1 ? [&apos;require&apos;] : [&apos;require&apos;, &apos;exports&apos;, &apos;module&apos;]).concat(deps);
+        }
+    }
+ if (useInteractive) { //useInteractive在文初被设为false  这个应该是判断是IE(6-8)script标签做的特殊处理  (getInteractiveScript函数)ie6-8不支持script标签 支持onreadystatechange属性 有“uninitialized” – 原始状态 “loading” – 下载数据中..“loaded” – 下载完成 “interactive” – 还未执行完毕. “complete” – 脚本执行完毕.
+        node = currentlyAddingScript || getInteractiveScript();
+        if (node) {
+            if (!name) {
+                name = node.getAttribute(&apos;data-requiremodule&apos;); //获得引入模块的名字
+            }
+            context = contexts[node.getAttribute(&apos;data-requirecontext&apos;)]; //找出模块中的名字
+        }
+    }  
+         if (context) {             //将此模块加入队列中 
+        context.defQueue.push([name, deps, callback]);    
+        context.defQueueMap[name] = true;
+    } else {
+        globalDefQueue.push([name, deps, callback]);
+    }
+</code></pre><p>看一下执行代码  </p>
+<blockquote>
+<pre><code>req.exec = function (text) {     /*将string文本eval  zzzzzzzzzzz*/
+    return eval(text);
+};
+</code></pre><p>触发是 req.load这个函数开始执行 第二个参数是主要参数 即moduleName   context.completeLoad(moduleName)<br>模块加载完成执行 onScriptLoad   然后 再次执行completeLoad然后一层层加载                      -end  </p>
+</blockquote>
+<p> –转载声明出处    </p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/前端-js库/">前端 js库</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="https://951759534.github.io/2017/06/01/requireJS/" data-title="requireJS源码解析 | 王帅的博客" data-tsina="undefined" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2017/06/03/对自己的总结/" title="对自己的总结">
+  <strong>上一篇：</strong><br/>
+  <span>
+  对自己的总结</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2017/06/01/来谈谈AMD-CMD-commonJS/"  title="来谈谈AMD-CMD-commonJS">
+ <strong>下一篇：</strong><br/> 
+ <span>来谈谈AMD-CMD-commonJS
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ 
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/前端/" title="前端">前端<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/杂文/" title="杂文">杂文<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/前端安全/" title="前端安全">前端安全<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/HTTP/" title="HTTP">HTTP<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/闲文/" title="闲文">闲文<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/移动端/" title="移动端">移动端<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/前端-js/" title="前端 js">前端 js<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/js库/" title="js库">js库<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/git/" title="git">git<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/移动端-前端/" title="移动端 前端">移动端 前端<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/java-ORM框架/" title="java ORM框架">java ORM框架<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/面试笔记/" title="面试笔记">面试笔记<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/node/" title="node">node<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/开发思想/" title="开发思想">开发思想<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/前端-js库/" title="前端 js库">前端 js库<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+    </ul>
+</div>
+
+  
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> 专注 <br/>
+			to be better</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com//u/1583479425" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/951759534" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:951759534@qq.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo"></a>© 2018
+		
+		<a href="/about" target="_blank" title="wang">wang</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
